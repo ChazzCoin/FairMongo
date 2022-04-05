@@ -1,6 +1,6 @@
 import json
-from Futils.rsLogger.CoreLogger import Log
-Log = Log("DICT")
+# from Futils.rsLogger import Log
+# Log = Log("DICT")
 
 """
 -> "dict" object extension/helper functions
@@ -27,7 +27,7 @@ def get(key: str, dic, default=False):
                 return result
         return default
     except Exception as e:
-        Log.e("Failed to get key for dict", error=e)
+        print(f"Failed to get key for dict error=[ {e} ]")
         return default
 
 def get_all(dic, *keys, force_type=None) -> []:
@@ -159,7 +159,7 @@ def removeKeyValue(key, dic: dict) -> dict:
         del dic[key]
         return dic
     except Exception as e:
-        Log.e("Failed to delete key value", error=e)
+        print(f"Failed to delete key value error=[ {e} ]")
         return dic
 
 def addKeyValue(key, value, dic: dict, forceList=False) -> dict:

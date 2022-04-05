@@ -1,6 +1,8 @@
 from . import Futils, LogColors, fig
 import os
 
+from .. import DICT
+
 
 class Log:
     log_level = 1
@@ -110,17 +112,17 @@ class Log:
         for message in messages:
             print(self.className, message)
 
-    def print_hookups(self, hookups):
-        for item in hookups:
-            self.print_hookup(item)
+    # def print_hookups(self, hookups):
+    #     for item in hookups:
+    #         self.print_hookup(item)
 
-    def print_hookup(self, hookup):
-        from Utils import DICT
-        self.p("-- -- -- --")
-        self.p(f"Title:", str(DICT.get("title", hookup)))
-        self.p(f"Rank:", str(DICT.get("rank", hookup)))
-        self.p(f"URL:", str(DICT.get("url", hookup)))
-        self.p("-- -- -- --")
+    def print_article(self, count, article):
+        print("")
+        print(LogColors.BOLD + f"{count}.", str(DICT.get("title", article)))
+        print(LogColors.BOLD + str(DICT.get("url", article)))
+
+    def cli(self, message):
+        print(LogColors.BOLD + f"{message}")
 
     def create_message(self, *messages):
         temp_message = ""
