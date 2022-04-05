@@ -1,0 +1,2 @@
+from .CoreLogger import Log
+
