@@ -11,23 +11,28 @@ class jArticles(MCollection, jFind):
 
     @classmethod
     def constructor(cls):
-        return cls(ARTICLES_COLLECTION)
+        nc = cls()
+        nc.init_FIND(ARTICLES_COLLECTION)
+        return nc
 
     @classmethod
     def ADD_ARTICLES(cls, articles):
-        newCls = cls(ARTICLES_COLLECTION)
+        newCls = cls()
+        newCls.init_FIND(ARTICLES_COLLECTION)
         newCls.add_articles(articles)
         return newCls
 
     @classmethod
     def GET_ARTICLES_BY_QUERY(cls, kwargs):
-        newCls = cls(ARTICLES_COLLECTION)
-        return newCls.get_articles_by_date(kwargs)
+        nc = cls()
+        nc.init_FIND(ARTICLES_COLLECTION)
+        return nc.get_articles_by_date(kwargs)
 
     @classmethod
     def SEARCH_ARTICLES(cls, search_term, field_name="body", page=0, limit=5):
-        newCls = cls(ARTICLES_COLLECTION)
-        return newCls.search_field(search_term, field_name, page=page, limit=limit)
+        nc = cls()
+        nc.init_FIND(ARTICLES_COLLECTION)
+        return nc.search_field(search_term, field_name, page=page, limit=limit)
 
     def get_articles_by_date_source(self, date, source_term):
         query = JQ.SEARCH_FIELD_BY_DATE(date, F.SOURCE, source_term)

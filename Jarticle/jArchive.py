@@ -12,7 +12,9 @@ class jArchive(MCollection):
 
     @classmethod
     def constructor(cls):
-        return cls(ARCHIVE_COLLECTION)
+        nc = cls()
+        nc.init_FIND(ARCHIVE_COLLECTION)
+        return nc
 
     @classmethod
     def MIGRATE_ARCHIVE_TO_ARTICLES(cls, *dates):
@@ -37,7 +39,8 @@ class jArchive(MCollection):
 
     @classmethod
     def GET_ARCHIVE_BY_DATE(cls, **kwargs):
-        newCls = cls(ARCHIVE_COLLECTION)
+        newCls = cls()
+        newCls.init_FIND(ARCHIVE_COLLECTION)
         return newCls.get_articles_by_date(kwargs)
 
     def get_articles_by_date(self, date):
@@ -45,6 +48,3 @@ class jArchive(MCollection):
 
     def remove_from_archive_by_id(self, record_id):
         return self.remove_record(JQ.ID(record_id))
-
-
-

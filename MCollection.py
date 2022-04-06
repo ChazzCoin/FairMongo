@@ -11,10 +11,16 @@ class MCollection(MCore, Find):
     collection_name: str = None
     collection: Database = None
 
-    def __init__(self, collection_name):
-        super().__init__(collection_name)
-        self.collection_name = collection_name
-        self.collection = GET_COLLECTION(collection_name)
+    # def __init__(self, collection_name):
+    #     super().__init__(collection_name)
+    #     self.collection_name = collection_name
+    #     self.collection = GET_COLLECTION(collection_name)
+
+    @classmethod
+    def GET_SOZIN(cls):
+        nc = cls()
+        nc.Sozin()
+        return nc
 
     def query(self, kwargs, page=0, limit=100):
         return self.base_query(kwargs, page=page, limit=limit)

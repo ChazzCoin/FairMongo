@@ -34,12 +34,14 @@ class O:
 
 class Q:
     BASE = lambda key, value: {key: value}
+    COMMENTS_AUTHOR = lambda key, value: { "this.comments.author": value }
     BASE_TWO = lambda key1, value1, key2, value2: {key1: value1, key2: value2}
     OR = lambda list_of_queries: {O.OR: list_of_queries}
     AND = lambda list_of_queries: {O.AND: list_of_queries}
     REGEX = lambda search_term: Q.BASE_TWO(O.REGEX, R.SEARCH(search_term), O.OPTIONS, 'i')
     REGEX_STRICT = lambda search_term: Q.BASE_TWO(O.REGEX, R.SEARCH_STRICT(search_term), O.OPTIONS, 'i')
     SEARCH = lambda field, search_term: Q.BASE(field, Q.REGEX(search_term))
+    SEARCH_EMBEDDED = lambda fieldOne, fieldTwo, search_term: Q.BASE(f"{fieldOne}.{fieldTwo}", Q.REGEX(search_term))
     SEARCH_STRICT = lambda field, search_term: Q.BASE(field, Q.REGEX_STRICT(search_term))
     LTE = lambda value: Q.BASE(O.LESS_THAN_OR_EQUAL, value)
     SIZE = lambda value: Q.BASE(O.SET, value)
@@ -53,7 +55,7 @@ class Q:
 class Find:
     collection = None
 
-    def __init__(self, collection_or_name):
+    def init_FIND(self, collection_or_name):
         if type(collection_or_name) == str:
             self.collection = GET_COLLECTION(collection_or_name)
         else:

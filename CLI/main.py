@@ -1,49 +1,70 @@
 from Futils import Regex
 from Futils.rsLogger import Log, LogColors
-# from Jarticle.jArticles import jArticles
-from CLI import UserInput, SearchArticles
+# from MCollection import MCollection
+from CLI import UserInput, SearchArticles, cCollection
+from DB import DATABASE_INSTANCE
 
 Log = Log("Search", log_level=4)
-# db = jArticles.constructor()
-
+db = DATABASE_INSTANCE
+RAW_COLLECTIONS = list(db.db.list_collections())
+COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
 WELCOME = f"\n{LogColors.HEADER}Welcome to pyFongo Command Line!"
-PYMONGO_INPUT = f"{LogColors.HEADER}MongoDB@pyFongo -> "
+PYMONGO_BASE = f"{LogColors.HEADER}MongoDB@pyFongo -> "
+PYMONGO_INPUT = lambda option: f"{LogColors.HEADER}MongoDB@pyFongo {option} -> "
 ENTER_SEARCH = "Enter Search Term: "
 SEARCHING = lambda search_term: f"Searching for: [ {search_term} ]"
 SEARCH_OPTIONS = "\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options\n"
-OPTIONS = {"1. Search -> Search Article Database.": "handle_search_input",
-           "X. Exit -> Quit pyFongo CLI": "killThySelf"}
+OPTIONS = {"1. Search -> Search Article Database.": ["1", "search", "articles"],
+           "2. Get Collection -> Init collection to query.": ["2", "collection"],
+           "X. Exit -> Quit pyFongo CLI": ["killThySelf"]}
 
+COMMAND_OPTIONS = {"search": ["1", "search", "articles"],
+                   "collection": ["2", "collection"],
+                   "exit": ["X", "exit", "kill", "die", "end"] }
 
-def display_options():
-    for opt in OPTIONS.keys():
-        Log.cli(f"{opt}")
+COMMANDS_BASE = {"back": ["4", "back", "options"],
+                 "exit": ["X", "exit", "kill", "die", "end"]}
 
-def handle_options_input(option_input):
-    if Regex.contains_any(["1", "search"], option_input):
-        SearchArticles.handle_search_input(user_in=option_input, isFirst=True)
-    elif Regex.contains_any(["X", "exit", "kill", "die", "end"], option_input):
+class pyFongo:
+    processing = True
+
+    def start(self):
+        print(WELCOME)
+        self.main_loop()
+
+    def main_loop(self):
+        while self.processing:
+            self.display_options()
+            user_in = UserInput.user_request(PYMONGO_BASE)
+            self.handle_options_input(user_in)
+
+    def handle_options_input(self, option_input):
+        for option in COMMAND_OPTIONS.keys():
+            lookUp = COMMAND_OPTIONS[option]
+            if Regex.contains_any(lookUp, option_input):
+                # -> we have our command, "option"
+                func = self.__getattribute__(option)
+                return func()
+
+    """ -> Master Commands <- """
+    def collection(self):
+        cCollection.main_loop()
+
+    def search(self):
+        return SearchArticles.restart_search()
+
+    def exit(self):
         exit()
 
-def main_loop():
-    processing = True
-    while processing:
-        display_options()
-        user_in = UserInput.user_request(PYMONGO_INPUT)
-        handle_options_input(user_in)
+    def restart(self):
+        self.main_loop()
 
-def start():
-    print(WELCOME)
-    main_loop()
-    # search_term = user_request(ENTER_SEARCH)
-    # perform_search(search_term)
-
-
-def restart():
-    # print(WELCOME)
-    search_term = UserInput.user_request(ENTER_SEARCH)
-    SearchArticles.perform_search(search_term)
+    @staticmethod
+    def display_options():
+        for opt in OPTIONS.keys():
+            Log.cli(f"{opt}")
 
 
 if __name__ == '__main__':
-    start()
+    c = pyFongo()
+    c.start()

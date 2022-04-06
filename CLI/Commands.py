@@ -58,9 +58,6 @@ def parse_cli_commands(mess: str):
             i += 1
     return directory_command, filter_commands
 
-
-# parse_commands2("apple airpods --date march 22 2022")
-
 def build_query(search_term, filters):
     sq = JQ.SEARCH_ALL(search_term=search_term)
     if not filters:
