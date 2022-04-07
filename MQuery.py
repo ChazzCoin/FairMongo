@@ -5,7 +5,7 @@ from Futils.rsLogger import Log
 Log = Log("MQuery")
 
 """
-    -> Master Base Query Class/Object
+    -> Master Base Query Class/Object/Helper
 """
 
 class R:

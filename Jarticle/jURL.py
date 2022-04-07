@@ -2,12 +2,10 @@ from Futils import LIST, DICT
 from Jarticle.jQuery import jFind
 from MCollection import MCollection
 from MQuery import Q
-from DB import GET_COLLECTION
 from Futils.rsLogger.CoreLogger import Log
 Log = Log("jURL")
 
 SOURCES_COLLECTION = "sources"
-# urls_collection = "urls"
 STATUS = "status"
 SOURCE = "source"
 URLS = "urls"
@@ -46,8 +44,8 @@ class jURL(MCollection, jFind):
         nc.init_FIND(URLS_COLLECTION)
         return nc.get_urls(status="000")
 
-    def set_collection(self, collection_name="urls"):
-        self.collection = GET_COLLECTION(collection_name)
+    # def set_collection(self, collection_name="urls"):
+    #     self.collection = GET_COLLECTION(collection_name)
 
     @classmethod
     def GET_SOURCES(cls, source):
@@ -156,7 +154,7 @@ class jURL(MCollection, jFind):
     def add(self, queryOne, queryTwo):
         try:
             Log.v(f"queryOne = [ {queryOne} ] -- queryTwo = [ {queryTwo} ]")
-            self.collection.collection.update_one(queryOne, queryTwo, upsert=True)
+            self.update_record(queryOne, queryTwo)
             Log.s(f"add: successfully added urls!")
             return True
         except Exception as e:
@@ -167,7 +165,7 @@ class jURL(MCollection, jFind):
         urls = LIST.flatten(urls)
         s = {STATUS: status}
         q = {"$pullAll": {URLS: urls}}
-        return self.collection.update_record(s, q)
+        return self.update_record(s, q)
 
     def clear_urls(self, status):
         return self.update_urls(status, [])
@@ -177,7 +175,7 @@ class jURL(MCollection, jFind):
         try:
             list_of_urls = list(set(list_of_urls))
             newQuery = {"$set": {URLS: list_of_urls} }
-            self.collection.update_record({STATUS: status}, newQuery)
+            self.update_record({STATUS: status}, newQuery)
             Log.s(f"UPDATED {status} Successfully updated URLs")
             return True
         except Exception as e:

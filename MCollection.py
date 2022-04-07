@@ -1,5 +1,4 @@
 import time
-from MDB import GET_COLLECTION
 from Futils import DICT
 from MCore import MCore
 from MQuery import Find
@@ -54,10 +53,10 @@ class MCollection(MCore, Find):
         except Exception as e:
             Log.e(f"Failed to save record in DB=[ {self.collection_name} ]", error=e)
 
-    def update_record(self, findQuery, updateQuery):
+    def update_record(self, findQuery, updateQuery, upsert=True):
         try:
             time.sleep(1)
-            self.collection.update_one( findQuery, updateQuery )
+            self.collection.update_one( findQuery, updateQuery, upsert=upsert )
             Log.s(f"UPDATED Record in DB=[ {self.collection_name} ]")
         except Exception as e:
             Log.e(f"Failed to save record in DB=[ {self.collection_name} ]", error=e)

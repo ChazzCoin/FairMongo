@@ -1,5 +1,4 @@
 from Futils import LIST, DICT
-from MQuery import Q
 from Jarticle import JQ
 from Jarticle.jArticles import jArticles
 from Futils.rsLogger.CoreLogger import Log
@@ -11,7 +10,7 @@ ARCHIVE_COLLECTION = "archive"
 class jArchive(MCollection):
 
     @classmethod
-    def constructor(cls):
+    def constructor_jArchive(cls):
         nc = cls()
         nc.init_FIND(ARCHIVE_COLLECTION)
         return nc
@@ -19,7 +18,7 @@ class jArchive(MCollection):
     @classmethod
     def MIGRATE_ARCHIVE_TO_ARTICLES(cls, *dates):
         dates = LIST.flatten(dates)
-        c = jArchive.constructor()
+        c = jArchive.constructor_jArchive()
         for date in dates:
             temp = c.get_articles_by_date(date=date)
             if not temp:

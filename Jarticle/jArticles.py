@@ -3,6 +3,8 @@ from Jarticle import F, JQ
 from Futils.rsLogger.CoreLogger import Log
 from Jarticle.jQuery import jFind
 from MCollection import MCollection
+from MQuery import Q
+
 Log = Log("jArticles")
 
 ARTICLES_COLLECTION = "articles"
@@ -17,6 +19,7 @@ class jArticles(MCollection, jFind):
 
     @classmethod
     def ADD_ARTICLES(cls, articles):
+        """ [ CRUCIAL FUNCTION ] -> DO NOT REMOVE THIS METHOD! <- """
         newCls = cls()
         newCls.init_FIND(ARTICLES_COLLECTION)
         newCls.add_articles(articles)
@@ -36,19 +39,29 @@ class jArticles(MCollection, jFind):
 
     def get_articles_by_date_source(self, date, source_term):
         query = JQ.SEARCH_FIELD_BY_DATE(date, F.SOURCE, source_term)
-        return self.collection.query(kwargs=query)
+        return self.query(kwargs=query)
 
     def get_articles_by_key_value(self, kwargs):
-        return self.collection.query(kwargs=kwargs)
+        return self.query(kwargs=kwargs)
 
     def get_articles_by_date(self, date):
-        return self.collection.query(kwargs=JQ.DATE(date))
+        return self.query(kwargs=JQ.DATE(date))
 
     def article_exists(self, article):
+        Log.i(f"Checking if Article already exists in Database...")
         q_date = self.get_arg(F.PUBLISHED_DATE, article)
+        q_title = self.get_arg(F.TITLE, article)
+        q_body = self.get_arg(F.BODY, article)
         q_url = self.get_arg(F.URL, article)
-        query = JQ.PUBLISHED_DATE_AND_URL(q_date, q_url)
-        return self.collection.query(kwargs=query)
+        # Setup Queries
+        title_query = Q.BASE(F.TITLE, q_title)
+        date_query = JQ.DATE(q_date)
+        title_date_query = Q.AND([title_query, date_query])
+        body_query = Q.BASE(F.BODY, q_body)
+        url_query = Q.BASE(F.URL, q_url)
+        # Final Query
+        final_query = Q.OR([url_query, body_query, title_date_query])
+        return self.query(kwargs=final_query)
 
     def add_articles(self, list_of_articles):
         list_of_articles = LIST.flatten(list_of_articles)
@@ -56,7 +69,9 @@ class jArticles(MCollection, jFind):
         for article in list_of_articles:
             article_exists = self.article_exists(article)
             if not article_exists:
-                self.collection.insert_record(article)
+                self.insert_record(article)
+            else:
+                Log.w("Article Exists in Database Already. Skipping...")
         Log.w(f"Finished Article Queue.")
 
 
