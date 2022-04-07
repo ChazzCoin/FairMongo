@@ -13,7 +13,7 @@ SEARCH_OPTIONS = "\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options\n"
 OPTIONS = {"1. Search -> Search Article Database.": "handle_search_input",
            "X. Exit -> Quit pyFongo CLI": "killThySelf"}
 
-db = jArticles.constructor()
+db = jArticles.constructor_jarticles()
 
 def handle_search_input(user_in, newPage=False, isFirst=False):
     if isFirst:

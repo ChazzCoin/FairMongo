@@ -1,8 +1,12 @@
-from DB import GET_COLLECTION
+from MDB import GET_COLLECTION
 from MCore import MCore
 from Futils.rsLogger import Log
 
 Log = Log("MQuery")
+
+"""
+    -> Master Base Query Class/Object
+"""
 
 class R:
     SEARCH = lambda search_term: fr'.*{search_term}.*'
@@ -62,6 +66,8 @@ class Find:
             self.collection = collection_or_name
 
     def base_query(self, kwargs, page=0, limit=100):
+        if not self.collection:
+            return False
         if limit:
             results = self.collection.find(kwargs).skip(page).limit(limit)
         else:

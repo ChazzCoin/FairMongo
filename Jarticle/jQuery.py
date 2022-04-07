@@ -5,8 +5,9 @@ from Jarticle import JQ, F
 
 class jFind(Find):
 
-    # def init_jFIND(self, collection_or_name):
-    #     super().__init__(collection_or_name)
+    """
+        -> Article Queries -> Helper Class for "j" classes.
+    """
 
     def search_field(self, search_term, field_name, page=0, limit=100):
         return self.base_query(kwargs=Q.SEARCH(field_name, search_term), page=page, limit=limit)

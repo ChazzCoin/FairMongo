@@ -9,29 +9,31 @@ Log = Log("MCore")
 
 s = " "
 
-if fig.db_environment == fig.LOCAL:
-    MONGO_URI = fig.local_mongo_db_uri
-elif fig.db_environment == fig.SOZIN:
-    MONGO_URI = fig.sozin_mongo_db_uri
-# else:
-#     MONGO_URI = fig.prod_mongo_db_uri
-
+SERVER_ENVIRONMENT = fig.get_server_environment_uri()
 DEFAULT_DATABASE_NAME = fig.db_name
+
+"""
+    -> THE MASTER BASE CLASS
+        - The Database Instance Itself.
+    -> Does not need a collection to be initiated.
+    -> Other Classes inherent this object.
+"""
 
 class MCore:
     connection_status = False
     client: MongoClient
     db: Database
 
-    def init(self, url=MONGO_URI, databaseName=DEFAULT_DATABASE_NAME):
+    def constructor(self, url=SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
         Log.i(f"Initiating MongoDB at url={url}")
         try:
             self.client = MongoClient(url)
             self.is_connected()
         except Exception as e:
             Log.e("Unable to initiate MongoDB.", error=e)
-            return
+            return False
         self.db = self.client.get_database(databaseName)
+        return self
 
     def is_connected(self) -> bool:
         try:
@@ -48,16 +50,21 @@ class MCore:
 
     @classmethod
     def Sozin(cls):
-        nc = cls()
-        nc.init(fig.sozin_mongo_db_uri)
+        nc = cls().constructor(fig.sozin_mongo_db_uri)
+        if nc.is_connected():
+            return nc
+        return False
+
+    @classmethod
+    def ArchivePi(cls):
+        nc = cls().constructor(fig.archivepi_mongo_db_uri)
         if nc.is_connected():
             return nc
         return False
 
     @classmethod
     def Collection(cls, collection_name):
-        nc = cls()
-        nc.init(fig.sozin_mongo_db_uri)
+        nc = cls().constructor(fig.get_server_environment_uri())
         collect: Database = nc.get_collection(collection_name)
         return collect
 
@@ -97,6 +104,7 @@ class MCore:
 
     @staticmethod
     def to_counted_dict(cursor):
+        """ DEPRECATED """
         result_dict = {}
         for item in cursor:
             _id = DICT.get("_id", item)

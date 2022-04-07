@@ -1,5 +1,5 @@
 import time
-from DB import GET_COLLECTION
+from MDB import GET_COLLECTION
 from Futils import DICT
 from MCore import MCore
 from MQuery import Find
@@ -7,14 +7,16 @@ from Futils.rsLogger.CoreLogger import Log
 from pymongo.database import Database
 Log = Log("MCollection")
 
+"""
+    -> BASE CLASS
+        - Collection Instance Object on top of MCore.
+    -> Does not need a collection to be initiated.
+    -> Other Classes inherent this object.
+"""
+
 class MCollection(MCore, Find):
     collection_name: str = None
     collection: Database = None
-
-    # def __init__(self, collection_name):
-    #     super().__init__(collection_name)
-    #     self.collection_name = collection_name
-    #     self.collection = GET_COLLECTION(collection_name)
 
     @classmethod
     def GET_SOZIN(cls):

@@ -10,7 +10,7 @@ ARTICLES_COLLECTION = "articles"
 class jArticles(MCollection, jFind):
 
     @classmethod
-    def constructor(cls):
+    def constructor_jarticles(cls):
         nc = cls()
         nc.init_FIND(ARTICLES_COLLECTION)
         return nc

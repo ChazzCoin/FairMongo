@@ -2,12 +2,15 @@ from Futils import Regex
 from Futils.rsLogger import Log, LogColors
 # from MCollection import MCollection
 from CLI import UserInput, SearchArticles, cCollection
-from DB import DATABASE_INSTANCE
+from MDB import DATABASE_INSTANCE
 
 Log = Log("Search", log_level=4)
+
 db = DATABASE_INSTANCE
+
 RAW_COLLECTIONS = list(db.db.list_collections())
 COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
+
 WELCOME = f"\n{LogColors.HEADER}Welcome to pyFongo Command Line!"
 PYMONGO_BASE = f"{LogColors.HEADER}MongoDB@pyFongo -> "
 PYMONGO_INPUT = lambda option: f"{LogColors.HEADER}MongoDB@pyFongo {option} -> "
