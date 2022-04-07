@@ -1,15 +1,17 @@
 from Futils import LIST, DICT
+from Jarticle.jQuery import jFind
 from MCollection import MCollection
 from MQuery import Q
 from DB import GET_COLLECTION
 from Futils.rsLogger.CoreLogger import Log
 Log = Log("jURL")
 
-sources_collection = "sources"
-urls_collection = "urls"
+SOURCES_COLLECTION = "sources"
+# urls_collection = "urls"
 STATUS = "status"
 SOURCE = "source"
 URLS = "urls"
+URLS_COLLECTION = "urls"
 RSS_FIELD = "rss"
 COUNT = "count"
 
@@ -24,56 +26,49 @@ FAILED_URLS = { STATUS: FAILED_STATUS, URLS: "" }
 
 SET_QUERY = Q.SET
 
-class jURL:
-    collection: MCollection
+class jURL(MCollection, jFind):
 
-    """ -> SETUP <- """
-    def init_urls(self):
-        self.set_collection(urls_collection)
-        if not self.collection.is_valid():
-            return False
+    @classmethod
+    def url_constructor(cls):
+        nc = cls()
+        nc.init_FIND(URLS_COLLECTION)
+        return nc
 
-    def init_sources(self):
-        self.set_collection(sources_collection)
-        if not self.collection.is_valid():
-            return False
+    @classmethod
+    def source_constructor(cls):
+        nc = cls()
+        nc.init_FIND(SOURCES_COLLECTION)
+        return nc
+
+    @classmethod
+    def GET_QUEUED_LIST(cls):
+        nc = cls()
+        nc.init_FIND(URLS_COLLECTION)
+        return nc.get_urls(status="000")
 
     def set_collection(self, collection_name="urls"):
         self.collection = GET_COLLECTION(collection_name)
 
     @classmethod
-    def INIT_URLS(cls):
-        nc = cls()
-        return nc.init_urls()
-
-    @classmethod
     def GET_SOURCES(cls, source):
-        nc = cls()
-        if not nc.init_sources():
-            return False
+        nc = cls.source_constructor()
         return nc.get_sources(source)
 
     @classmethod
     def ADD_TO_SOURCES(cls, source, list_of_urls):
-        nc = cls()
-        if not nc.init_sources():
-            return False
+        nc = cls.source_constructor()
         return nc.add_sources(source, list_of_urls)
 
     """ -> QUEUED (000) <- """
     @classmethod
     def ADD_TO_QUEUED(cls, list_of_urls):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         nc.add_urls(QUEUED_STATUS, list_of_urls)
         return nc
 
     @classmethod
     def POP_QUEUED(cls, removeFromQueued=False):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         qued = list(nc.get_urls(QUEUED_STATUS))
         next_url = qued.pop()
         if removeFromQueued:
@@ -81,49 +76,31 @@ class jURL:
         return next_url
 
     @classmethod
-    def GET_QUEUED_LIST(cls):
-        nc = cls()
-        if not nc.init_urls():
-            return False
-        qued = list(nc.get_urls(QUEUED_STATUS))
-        return qued
-
-    @classmethod
     def CLEAR_QUEUED_LIST(cls):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         nc.clear_urls(QUEUED_STATUS)
         return nc
 
     @classmethod
     def CLEAN_QUEUED_LIST(cls):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         nc.remove_successful_from_queued()
         return nc.remove_failed_from_queued()
 
     @classmethod
     def REMOVE_SUCCESSFUL_FROM_QUEUED(cls):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         return nc.remove_successful_from_queued()
 
     @classmethod
     def REMOVE_FAILED_FROM_QUEUED(cls):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         return nc.remove_failed_from_queued()
 
     """ -> SUCCESSFUL (200) <- """
     @classmethod
     def ADD_TO_SUCCESSFUL(cls, list_of_urls, removeFromQueued=True):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         nc.add_urls(SUCCESSFUL_STATUS, list_of_urls)
         if removeFromQueued:
             nc.remove_urls(list_of_urls, status=QUEUED_STATUS)
@@ -132,9 +109,7 @@ class jURL:
     """ -> FAILED (400) <- """
     @classmethod
     def ADD_TO_FAILED(cls, list_of_urls, removeFromQueued=True):
-        nc = cls()
-        if not nc.init_urls():
-            return False
+        nc = cls.url_constructor()
         nc.add(FAILED_STATUS, list_of_urls)
         if removeFromQueued:
             nc.remove_urls(list_of_urls, status=QUEUED_STATUS)
@@ -155,13 +130,13 @@ class jURL:
         return False
 
     def get_sources(self, source) -> []:
-        results = self.collection.query({ SOURCE: source })
+        results = self.query({ SOURCE: source })
         item = LIST.get(0, results)
         urls = DICT.get(URLS, item)
         return urls
 
     def get_urls(self, status):
-        results = self.collection.query({STATUS: status})
+        results = self.query({STATUS: status})
         item = LIST.get(0, results)
         urls = DICT.get(URLS, item)
         return urls if urls else False
@@ -211,4 +186,6 @@ class jURL:
 
 
 if __name__ == '__main__':
-    temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
+    temp = jURL.GET_SOURCES("rss")
+    print(temp)
+    # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
