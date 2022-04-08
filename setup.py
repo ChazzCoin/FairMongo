@@ -1,0 +1,21 @@
+from setuptools import setup
+
+setup(
+    name='pyFongo',
+    version='1.0.0',
+    description='A complete Python Package for PyMongo and MongoDB.',
+    url='https://github.com/chazzcoin/pyfongo',
+    author='ChazzCoin',
+    author_email='chazzcoin@gmail.com',
+    license='BSD 2-clause',
+    packages=['Backup', 'CLI', 'Futils', 'Jarticle'],
+    install_requires=['pymongo~=3.12.3', 'python-dateutil~=2.7.5'],
+    classifiers=[
+        'Development Status :: 1 - Planning',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+    ],
+)

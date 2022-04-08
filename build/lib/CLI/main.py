@@ -31,11 +31,6 @@ COMMANDS_BASE = {"back": ["4", "back", "options"],
 class pyFongo:
     processing = True
 
-    @classmethod
-    def RUN(cls):
-        nc = cls()
-        nc.start()
-
     def start(self):
         print(WELCOME)
         self.main_loop()

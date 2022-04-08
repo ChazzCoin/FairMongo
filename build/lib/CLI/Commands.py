@@ -2,7 +2,7 @@ from random import randrange
 from Futils import Language
 from Futils import DICT
 from MQuery import Q
-from Jarticle.jQuery import JQ
+from Jarticle.jQuery import JQ, jFind
 
 DASH_MODE = False
 

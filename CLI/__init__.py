@@ -1,4 +1,4 @@
-from CLI import Commands
+from CLI.main import pyFongo
 
-# def start():
-#     CLI.start()
+def start():
+    pyFongo.RUN()
