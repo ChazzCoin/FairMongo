@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+# -> Mac M1
+#!/bin/zsh
+# -> Basic Linux
+#!/usr/bin/bash
+
+#write out current crontab
+crontab -l > newcrontab
+# -> Command
+user="sozin"
+croncmd="/home/$user/bin/TiffanySystem/scripts/MDump"
+#echo new cron into cron file
+# minute hour day/month month day/week -> at 4:00am every Sunday
+echo "0 4 * * 0 $croncmd" >> newcrontab
+#install new cron file
+crontab newcrontab
+rm newcrontab

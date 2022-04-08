@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+# -> Mac M1
+#!/bin/zsh
+# -> Basic Linux
+#!/usr/bin/bash
+
+#write out current crontab
+crontab -l > newcrontab
+# -> Command
+user="hark"
+croncmd="/home/$user/bin/TiffanySystem/scripts/MRestore"
+#echo new cron into cron file
+# minute hour day/month month day/week -> at 5:00am every Sunday
+echo "0 5 * * 0 $croncmd" >> newcrontab
+#install new cron file
+crontab newcrontab
+rm newcrontab

@@ -1,7 +1,11 @@
 #!/bin/zsh
-# -> Mac M1
-#!/usr/bin/bash
-# -> Basic Linux
 
-sudo mongodump --forceTableScan --db research --collection articles -o /home/sozin/bin/mongobackup
-echo wonderwall | scp -r research/ hark@192.168.1.166:/home/hark/bin/docker
+# -> Mac M1
+#!/bin/zsh
+# -> Basic Linux
+#!/usr/bin/bash
+
+echo Running MongoDump on research-articles
+sudo mongodump --forceTableScan --db research --collection articles -o /home/sozin/bin/TiffanySystem/mongobackup
+sshpass -p 'wonderwall' scp -r /home/sozin/bin/TiffanySystem/mongobackup/research/ hark@192.168.1.166:/home/hark/bin/TiffanySystem/mongorestore
+echo Done!

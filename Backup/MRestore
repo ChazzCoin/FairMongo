@@ -3,4 +3,6 @@
 #!/usr/bin/bash
 # -> Basic Linux
 
+echo Restoring research-articles from MongoDump
 mongorestore --db research --collection articles articles.bson
+echo Done!
