@@ -1,6 +1,6 @@
 from Futils import LIST
-from Jarticle import F, JQ
 from Futils.rsLogger.CoreLogger import Log
+from Jarticle.jHelper import JQ, F
 from Jarticle.jQuery import jFind
 from MCollection import MCollection
 from MQuery import Q

@@ -1,5 +1,5 @@
 from Futils import LIST, DICT
-from Jarticle import JQ
+from Jarticle.jHelper import JQ
 from Jarticle.jArticles import jArticles
 from Futils.rsLogger.CoreLogger import Log
 from MCollection import MCollection

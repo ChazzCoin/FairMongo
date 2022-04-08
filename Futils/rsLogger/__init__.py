@@ -1,2 +1,2 @@
-from .CoreLogger import Log
+from Futils.rsLogger.CoreLogger import Log
 

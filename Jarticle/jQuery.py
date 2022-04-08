@@ -1,7 +1,7 @@
 from pymongo import cursor
 from MCore import MCore
 from MQuery import Find, Q
-from Jarticle import JQ, F
+from Jarticle.jHelper import JQ, F
 
 class jFind(Find):
 
