@@ -50,6 +50,6 @@ class jArchive(MCollection):
 
 
 if __name__ == '__main__':
-    date = "April 08 2022"
-    # dates = DATE.get_range_of_dates(startDate=date, daysBack=90)
-    jArchive.MIGRATE_ARCHIVE_TO_ARTICLES([date])
+    date = "April 09 2022"
+    dates = DATE.get_range_of_dates(startDate=date, daysBack=100)
+    jArchive.MIGRATE_ARCHIVE_TO_ARTICLES(dates)

@@ -7,9 +7,9 @@ from Futils.rsLogger.CoreLogger import Log
 import datetime
 
 s = " "
-SERVER_ENVIRONMENT = fig.get_server_environment_uri()
+DEFAULT_SERVER_ENVIRONMENT = fig.get_server_environment_uri()
 DEFAULT_DATABASE_NAME = fig.db_name
-Log = Log(f"MCore HOST=[ {fig.db_environment} ]")
+Log = Log(f"MCore")
 
 """
     -> THE MASTER BASE CLASS
@@ -23,13 +23,30 @@ class MCore:
     client: MongoClient
     db: Database
 
-    def constructor(self, url=SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
-        Log.i(f"Initiating MongoDB: DATABASE=[ {databaseName} ], URI={url}")
+    def construct_fig_host_database(self, hostName, databaseName=DEFAULT_DATABASE_NAME):
+        Log.className = f"MCore HOST=[ {hostName} ], DATABASE=[ {databaseName} ]"
+        Log.i(f"Initiating MongoDB with Fig Host: {hostName}")
+        fig_host_uri = fig.get_server_environment_uri_for_host_name(hostName)
+        if fig_host_uri:
+            try:
+                self.client = MongoClient(fig_host_uri)
+                self.is_connected()
+            except Exception as e:
+                Log.e(f"Unable to initiate MongoDB: HOST=[ {fig.db_environment_name} ]", error=e)
+                return False
+            if databaseName:
+                self.db = self.client.get_database(databaseName)
+            return self
+        return False
+
+    def constructor(self, url=DEFAULT_SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
+        Log.className = f"MCore HOST=[ {fig.db_environment_name} ], DATABASE=[ {databaseName} ]"
+        Log.i(f"Initiating MongoDB: URI={url}")
         try:
             self.client = MongoClient(url)
             self.is_connected()
         except Exception as e:
-            Log.e(f"Unable to initiate MongoDB: HOST=[ {fig.db_environment} ]", error=e)
+            Log.e(f"Unable to initiate MongoDB: URI={url}", error=e)
             return False
         self.db = self.client.get_database(databaseName)
         return self

@@ -25,7 +25,7 @@ RESTORE:
 """
 
 """ -> SERVER INFO <- """
-db_environment = SOZIN
+db_environment_name = SOZIN
 db_name = "research"
 
 BASE_MONGO_URI = lambda mongo_ip, mongo_port: f"mongodb://{mongo_ip}:{mongo_port}"
@@ -54,12 +54,23 @@ hark_mongo_port = "27017"
 hark_mongo_password = ""
 hark_mongo_db_uri = BASE_MONGO_URI(hark_mongo_ip, hark_mongo_port)
 
-def get_server_environment_uri():
-    if db_environment == LOCAL:
+def get_server_environment_uri_for_host_name(hostName):
+    if hostName == LOCAL:
         return local_mongo_db_uri
-    elif db_environment == SOZIN:
+    elif hostName == SOZIN:
         return sozin_mongo_db_uri
-    elif db_environment == ARCHIVEPI:
+    elif hostName == ARCHIVEPI:
         return archivepi_mongo_db_uri
-    elif db_environment == HARK:
+    elif hostName == HARK:
+        return hark_mongo_db_uri
+    return False
+
+def get_server_environment_uri():
+    if db_environment_name == LOCAL:
+        return local_mongo_db_uri
+    elif db_environment_name == SOZIN:
+        return sozin_mongo_db_uri
+    elif db_environment_name == ARCHIVEPI:
+        return archivepi_mongo_db_uri
+    elif db_environment_name == HARK:
         return hark_mongo_db_uri

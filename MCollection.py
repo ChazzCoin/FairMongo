@@ -1,4 +1,6 @@
 import time
+
+import fig
 from Futils import DICT
 from MCore import MCore
 from MQuery import Find
@@ -23,6 +25,24 @@ class MCollection(MCore, Find):
         nc.Sozin()
         return nc
 
+    @classmethod
+    def construct_fig_host_collection(cls, hostName, collectionName, databaseName=False):
+        nc = cls()
+        if databaseName:
+            # -> if provided database name
+            nc.construct_fig_host_database(hostName, databaseName=databaseName)
+        else:
+            # -> Use Default Database.
+            nc.construct_fig_host_database(hostName, databaseName=databaseName)
+        # -> if provided collection -> forcing it though
+        if collectionName:
+            nc.private_set_collection(collectionName)
+        return nc
+
+    def private_set_collection(self, collection_or_name):
+        self.collection_name = str(collection_or_name)
+        self.collection = self.get_collection(collection_or_name)
+
     def query(self, kwargs, page=0, limit=100):
         return self.base_query(kwargs, page=page, limit=limit)
 
@@ -40,7 +60,7 @@ class MCollection(MCore, Find):
         return DICT.get(key, value, default=default)
 
     def get_document_count(self):
-        res = self.collection.find({})
+        res = self.query({})
         if res:
             return len(list(res))
         return False
@@ -68,3 +88,9 @@ class MCollection(MCore, Find):
             Log.s(f"Removed Record in DB=[ {self.collection_name} ]")
         except Exception as e:
             Log.e(f"Failed to remove record in DB=[ {self.collection_name} ]", error=e)
+
+
+if __name__ == '__main__':
+    n = MCollection
+    n.construct_fig_host_collection(fig.HARK, "articles")
+    n.init_FIND(n.collection_name)

@@ -2,11 +2,11 @@ from Futils import Regex
 from Futils.rsLogger import Log, LogColors
 # from MCollection import MCollection
 from CLI import UserInput, SearchArticles, cCollection
-from MDB import DATABASE_INSTANCE
+from MDB import DEFAULT_HOST_INSTANCE
 
 Log = Log("Search", log_level=4)
 
-db = DATABASE_INSTANCE
+db = DEFAULT_HOST_INSTANCE
 
 RAW_COLLECTIONS = list(db.db.list_collections())
 COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
