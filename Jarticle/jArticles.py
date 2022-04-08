@@ -76,13 +76,8 @@ class jArticles(MCollection, jFind):
 
 
 if __name__ == '__main__':
-    dat = "February 27 2022"
-    # c = mArchive.constructor()
-    # c = jArticles.constructor()
-    temp = jArticles.SEARCH_ARTICLES("airpods")
-    # res = c.get_document_count()
-    # print(res)
-    # temp = mArticles.SEARCH_ARTICLES("Fitch Ratings")
-    print(temp)
+    c = jArticles.constructor_jarticles()
+    res = c.get_document_count()
+    print(res)
 
 

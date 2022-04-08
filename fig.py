@@ -3,14 +3,29 @@
 LOCAL = "local"
 PROD = "prod"
 SOZIN = 'sozin'
+HARK = "hark"
 ARCHIVEPI = "archivepi"
 
 """
-docker run --name tiffany-mongo4 -v /mnt/SozinData/docker/TiffanyMongo:/data/db -d mongo:4.4
+SOZIN:
+-> docker run --name tiffany-mongo4 -v /mnt/SozinData/docker/TiffanyMongo:/data/db -d mongo:4.4
+
+HARK:
+-> docker run --name hark-mongodb -p 27017:27017 -v /home/hark/bin/docker/mongodb:/data/db -d mongo:4.4
+"""
+
+"""
+BACKUP: ( -o path/for/export )
+-> sudo mongodump --forceTableScan --db research --collection articles -o /home/sozin/bin
+SEND TO HARK:
+-> scp -r research/ hark@192.168.1.166:/home/hark/bin/docker
+
+RESTORE:
+-> mongorestore --db research --collection articles articles.bson
 """
 
 """ -> SERVER INFO <- """
-db_environment = ARCHIVEPI
+db_environment = HARK
 db_name = "research"
 
 BASE_MONGO_URI = lambda mongo_ip, mongo_port: f"mongodb://{mongo_ip}:{mongo_port}"
@@ -34,6 +49,11 @@ archivepi_mongo_port = "27017"
 archivepi_mongo_password = ""
 archivepi_mongo_db_uri = BASE_MONGO_URI(archivepi_mongo_ip, archivepi_mongo_port)
 
+hark_mongo_ip = "192.168.1.166"
+hark_mongo_port = "27017"
+hark_mongo_password = ""
+hark_mongo_db_uri = BASE_MONGO_URI(hark_mongo_ip, hark_mongo_port)
+
 def get_server_environment_uri():
     if db_environment == LOCAL:
         return local_mongo_db_uri
@@ -41,3 +61,5 @@ def get_server_environment_uri():
         return sozin_mongo_db_uri
     elif db_environment == ARCHIVEPI:
         return archivepi_mongo_db_uri
+    elif db_environment == HARK:
+        return hark_mongo_db_uri

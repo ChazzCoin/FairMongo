@@ -5,12 +5,11 @@ import fig
 from dateutil import parser
 from Futils.rsLogger.CoreLogger import Log
 import datetime
-Log = Log("MCore")
 
 s = " "
-
 SERVER_ENVIRONMENT = fig.get_server_environment_uri()
 DEFAULT_DATABASE_NAME = fig.db_name
+Log = Log(f"MCore HOST=[ {fig.db_environment} ]")
 
 """
     -> THE MASTER BASE CLASS
@@ -25,12 +24,12 @@ class MCore:
     db: Database
 
     def constructor(self, url=SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
-        Log.i(f"Initiating MongoDB at url={url}")
+        Log.i(f"Initiating MongoDB: DATABASE=[ {databaseName} ], URI={url}")
         try:
             self.client = MongoClient(url)
             self.is_connected()
         except Exception as e:
-            Log.e("Unable to initiate MongoDB.", error=e)
+            Log.e(f"Unable to initiate MongoDB: HOST=[ {fig.db_environment} ]", error=e)
             return False
         self.db = self.client.get_database(databaseName)
         return self
@@ -58,6 +57,13 @@ class MCore:
     @classmethod
     def ArchivePi(cls):
         nc = cls().constructor(fig.archivepi_mongo_db_uri)
+        if nc.is_connected():
+            return nc
+        return False
+
+    @classmethod
+    def Hark(cls):
+        nc = cls().constructor(fig.hark_mongo_db_uri)
         if nc.is_connected():
             return nc
         return False

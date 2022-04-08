@@ -1,0 +1,6 @@
+#!/bin/zsh
+# -> Mac M1
+#!/usr/bin/bash
+# -> Basic Linux
+
+mongorestore --db research --collection articles articles.bson
