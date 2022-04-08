@@ -1,6 +1,7 @@
 import datetime
 import time
 from dateutil import parser
+import dateutil.relativedelta
 
 n = "\n"
 s = " "
@@ -123,22 +124,38 @@ def get_last_x_days(days):
 def to_hours_minutes_seconds(seconds):
     return str(datetime.timedelta(seconds=seconds))
 
-def add_months(str_date, months=1):
-    date = parser.parse(str_date)
-    d = datetime
-    month = date.month + months
-    if month > 36:
-        return None
-    year = date.year
-    if month > 24:
-        year = date.year + 2
-        month = month - 24
-    else:
-        if 12 < month < 24:
-            year = date.year + 1
-            month = month - 12
-    new_date = d.datetime(year, month, date.day)
-    return to_db_date(new_date)
+def add_months(startDate, months=1):
+    date = parser.parse(startDate)
+    newDate = date + dateutil.relativedelta.relativedelta(months=months)
+    return to_db_date(newDate)
+
+def subtract_months(startDate, months=1):
+    date = parser.parse(startDate)
+    newDate = date - dateutil.relativedelta.relativedelta(months=months)
+    return to_db_date(newDate)
+
+def subtract_years(startDate, years=1):
+    date = parser.parse(startDate)
+    newDate = date - dateutil.relativedelta.relativedelta(years=years)
+    return to_db_date(newDate)
+
+def subtract_hours(startDate, hours=1):
+    date = parser.parse(startDate)
+    newDate = date - dateutil.relativedelta.relativedelta(hours=hours)
+    return to_db_date(newDate)
+
+def subtract_days(startDate, days=1):
+    date = parser.parse(startDate)
+    newDate = date - dateutil.relativedelta.relativedelta(days=days)
+    return to_db_date(newDate)
+
+def get_range_of_dates(startDate, daysBack=1):
+    current_date = startDate
+    list_of_dates = [startDate]
+    for i in range(daysBack):
+        current_date = subtract_days(current_date, 1)
+        list_of_dates.append(current_date)
+    return list_of_dates
 
 
 months = {

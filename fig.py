@@ -25,7 +25,7 @@ RESTORE:
 """
 
 """ -> SERVER INFO <- """
-db_environment = HARK
+db_environment = SOZIN
 db_name = "research"
 
 BASE_MONGO_URI = lambda mongo_ip, mongo_port: f"mongodb://{mongo_ip}:{mongo_port}"

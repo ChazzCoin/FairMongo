@@ -1,4 +1,4 @@
-from Futils import LIST, DICT
+from Futils import LIST, DICT, DATE
 from Jarticle.jHelper import JQ
 from Jarticle.jArticles import jArticles
 from Futils.rsLogger.CoreLogger import Log
@@ -47,3 +47,9 @@ class jArchive(MCollection):
 
     def remove_from_archive_by_id(self, record_id):
         return self.remove_record(JQ.ID(record_id))
+
+
+if __name__ == '__main__':
+    date = "April 08 2022"
+    # dates = DATE.get_range_of_dates(startDate=date, daysBack=90)
+    jArchive.MIGRATE_ARCHIVE_TO_ARTICLES([date])
