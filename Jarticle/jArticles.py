@@ -1,7 +1,6 @@
 from Futils import LIST
 from Futils.rsLogger.CoreLogger import Log
 from Jarticle.jHelper import JQ, F
-from Jarticle.jQuery import jFind
 from MCollection import MCollection
 from MQuery import Q
 
@@ -9,7 +8,8 @@ Log = Log("jArticles")
 
 ARTICLES_COLLECTION = "articles"
 
-class jArticles(MCollection, jFind):
+""" Master Class to work with Article Collection """
+class jArticles(MCollection):
 
     @classmethod
     def constructor_jarticles(cls):

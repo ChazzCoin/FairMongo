@@ -6,6 +6,8 @@ from dateutil import parser
 from Futils.rsLogger.CoreLogger import Log
 import datetime
 
+from MQuery import QBuilder
+
 s = " "
 DEFAULT_SERVER_ENVIRONMENT = fig.get_server_environment_uri()
 DEFAULT_DATABASE_NAME = fig.db_name
@@ -18,10 +20,11 @@ Log = Log(f"MCore")
     -> Other Classes inherent this object.
 """
 
-class MCore:
+class MCore(QBuilder):
     connection_status = False
     client: MongoClient
     db: Database
+    collection: Database = False
 
     def construct_fig_host_database(self, hostName, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {hostName} ], DATABASE=[ {databaseName} ]"
@@ -64,6 +67,18 @@ class MCore:
             return False
         return False
 
+    def base_query(self, kwargs, page=0, limit=100):
+        if not self.collection:
+            return False
+        if limit:
+            results = self.collection.find(kwargs).skip(page).limit(limit)
+        else:
+            results = self.collection.find(kwargs)
+        results = MCore.to_list(results)
+        if results and len(results) > 0:
+            return results
+        return False
+
     @classmethod
     def Sozin(cls):
         nc = cls().constructor(fig.sozin_mongo_db_uri)
@@ -96,7 +111,8 @@ class MCore:
         INTERNAL/PRIVATE ONLY
         - DO NOT USE -
         """
-        return self.db.get_collection(collection_name)
+        self.collection = self.db.get_collection(collection_name)
+        return self.collection
 
     """ OUT of database -> OFFICIAL DATE CONVERSION FROM DATABASE ENTRY <- """
     @staticmethod
@@ -111,6 +127,10 @@ class MCore:
             t = datetime.datetime.now()
         date = str(t.strftime("%B")) + s + str(t.strftime("%d")) + s + str(t.strftime("%Y"))
         return date
+
+    @staticmethod
+    def get_now_date():
+        return DATE.mongo_date_today()
 
     @staticmethod
     def parse_date(obj=None):

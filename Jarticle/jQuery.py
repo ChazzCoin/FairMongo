@@ -1,12 +1,13 @@
 from pymongo import cursor
+from Jarticle import jArticles
 from MCore import MCore
-from MQuery import Find, Q
+from MQuery import Q
 from Jarticle.jHelper import JQ, F
 
-class jFind(Find):
+class jSearch(jArticles):
 
     """
-        -> Article Queries -> Helper Class for "j" classes.
+        -> Article Extension for Specifically Search Functionality.
     """
 
     def search_field(self, search_term, field_name, page=0, limit=100):

@@ -1,6 +1,9 @@
 import MDB
-from Jarticle import JQ, F
-from Jarticle.jArticles import jArticles
+from MQuery import QBuilder
+import Jarticle
+import CLI
+# from Jarticle.jHelper import JQ, F
+# from Jarticle.jArticles import jArticles
 from CLI import main
 
 __version__ = "1.0.0"

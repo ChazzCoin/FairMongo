@@ -1,5 +1,4 @@
-from MDB import GET_COLLECTION
-from MCore import MCore
+import json
 from Futils.rsLogger import Log
 
 Log = Log("MQuery")
@@ -56,26 +55,23 @@ class Q:
     LESS_THAN_OR_EQUAL = lambda value: Q.BASE(O.LESS_THAN_OR_EQUAL, value)
     GREATER_THAN_OR_EQUAL = lambda value: Q.BASE(O.GREATER_THAN_OR_EQUAL, value)
 
-class Find:
-    collection = None
 
-    def init_FIND(self, collection_or_name):
-        if type(collection_or_name) == str:
-            self.collection = GET_COLLECTION(collection_or_name)
-        else:
-            self.collection = collection_or_name
+class QBuilder(Q, O, R):
+    query_builder = {}
 
-    def base_query(self, kwargs, page=0, limit=100):
-        if not self.collection:
-            return False
-        if limit:
-            results = self.collection.find(kwargs).skip(page).limit(limit)
-        else:
-            results = self.collection.find(kwargs)
-        results = MCore.to_list(results)
-        if results and len(results) > 0:
-            return results
-        return False
+    def add_to_query_builder(self, key, value):
+        self.query_builder[key] = value
+
+    def get_built_query(self):
+        return self.query_builder
+
+    def clear_query_builder(self):
+        self.query_builder = {}
+
+    def print_built_query(self):
+        obj = json.dumps(self.query_builder, sort_keys=True, indent=4, default=str)
+        print(obj)
+
 
 
 

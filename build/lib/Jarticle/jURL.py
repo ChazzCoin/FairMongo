@@ -1,5 +1,5 @@
 from Futils import LIST, DICT
-from Jarticle.jQuery import jFind
+from Jarticle.jQuery import jSearch
 from MCollection import MCollection
 from MQuery import Q
 from Futils.rsLogger.CoreLogger import Log
@@ -24,7 +24,7 @@ FAILED_URLS = { STATUS: FAILED_STATUS, URLS: "" }
 
 SET_QUERY = Q.SET
 
-class jURL(MCollection, jFind):
+class jURL(MCollection, jSearch):
 
     @classmethod
     def url_constructor(cls):
