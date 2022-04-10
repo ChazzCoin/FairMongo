@@ -21,6 +21,10 @@ class jSearch(MCollection):
     def search_unlimited(self, search_term):
         return self.base_query(kwargs=JQ.SEARCH_ALL(search_term), page=False, limit=False)
 
+    def search_unlimited_filters(self, search_term, filters):
+        kwargs = Q.AND([JQ.SEARCH_ALL(search_term), filters])
+        return self.base_query(kwargs=kwargs, page=False, limit=False)
+
     def search_before_or_after_date(self, search_term, date, page=0, limit=100, before=False):
         if before:
             return self.base_query(kwargs=JQ.SEARCH_ALL_BY_DATE_LTE(search_term, date), page=page, limit=limit)

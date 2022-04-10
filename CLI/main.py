@@ -1,14 +1,14 @@
 from Futils import Regex
 from Futils.rsLogger import Log, LogColors
 # from MCollection import MCollection
-from CLI import UserInput, SearchArticles, cCollection
+from CLI import UserRequest, SearchArticles, cCollection
 from MDB import DEFAULT_HOST_INSTANCE
 
 Log = Log("Search", log_level=4)
 
 db = DEFAULT_HOST_INSTANCE
 
-RAW_COLLECTIONS = list(db.db.list_collections())
+RAW_COLLECTIONS = list(db.core_db.list_collections())
 COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
 
 WELCOME = f"\n{LogColors.HEADER}Welcome to pyFongo Command Line!"
@@ -43,7 +43,7 @@ class pyFongo:
     def main_loop(self):
         while self.processing:
             self.display_options()
-            user_in = UserInput.user_request(PYMONGO_BASE)
+            user_in = UserRequest.user_request(PYMONGO_BASE)
             self.handle_options_input(user_in)
 
     def handle_options_input(self, option_input):

@@ -1,6 +1,6 @@
-from Futils import Regex
+from Futils import Regex, LIST
 from Futils.rsLogger import Log, LogColors
-from CLI import UserInput
+from CLI import UserRequest, Commands
 from Jarticle.jArticles import jArticles
 
 Log = Log("SearchArticles")
@@ -17,14 +17,12 @@ db = jArticles.constructor_jarticles()
 
 def handle_search_input(user_in, newPage=False, isFirst=False):
     if isFirst:
-        user_search = UserInput.user_request(ENTER_SEARCH)
-        perform_search(user_search)
+        request_user_search_query()
         return False
     if newPage and Regex.contains_any(["1", "next", "page"], user_in):
         return True
     if Regex.contains_any(["2", "new", "search"], user_in):
-        user_search = UserInput.user_request(ENTER_SEARCH)
-        perform_search(user_search)
+        request_user_search_query()
         return False
     if Regex.contains_any(["3", "exit", "quit"], user_in):
         exit()
@@ -34,8 +32,14 @@ def handle_search_input(user_in, newPage=False, isFirst=False):
     restart_search()
 
 def restart_search():
-    search_term = UserInput.user_request(ENTER_SEARCH)
-    perform_search(search_term)
+    request_user_search_query()
+
+def request_user_search_query():
+    search_input = UserRequest.user_request(ENTER_SEARCH)
+    search_commands = Commands.parse_cli_commands(search_input)
+    search_term = LIST.get(0, search_commands)
+    filters = LIST.get(1, search_commands)
+    perform_search(search_term, filters)
 
 def search_loop(records):
     count = len(records)
@@ -48,7 +52,7 @@ def search_loop(records):
     while processing:
         if current_page > total_pages:
             Log.cli(f"{LogColors.HEADER}\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options")
-            user_in = UserInput.user_request(PYMONGO_INPUT)
+            user_in = UserRequest.user_request(PYMONGO_INPUT)
             if not handle_search_input(user_in, False):
                 return
 
@@ -62,25 +66,24 @@ def search_loop(records):
         # -> Prepare for next input
         if current_page >= total_pages:
             Log.cli(f"{LogColors.HEADER}\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options")
-            user_in = UserInput.user_request(PYMONGO_INPUT)
+            user_in = UserRequest.user_request(PYMONGO_INPUT)
             if not handle_search_input(user_in, False):
                 return
         else:
             Log.cli(f"{LogColors.HEADER}\n1. Next Page - 2. New Search - 3. Exit - 4. Back/Options")
-            user_in = UserInput.user_request(PYMONGO_INPUT)
+            user_in = UserRequest.user_request(PYMONGO_INPUT)
         if not handle_search_input(user_in, True):
             return
         current_page += 1
 
-def perform_search(search_term):
+def perform_search(search_term, filters):
     Log.i(f"{SEARCHING(search_term=search_term)}")
-    records = db.search_unlimited(search_term=search_term)
+    records = db.search_unlimited_filters(search_term=search_term, filters=filters)
     if records:
         search_loop(records)
     else:
         Log.e("No Results Found.")
-        seearc_request = UserInput.user_request(ENTER_SEARCH)
-        perform_search(seearc_request)
+        request_user_search_query()
 
 def get_page(records, page):
     end_temp = page + 1
