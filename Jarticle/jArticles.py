@@ -14,7 +14,7 @@ class jArticles(jSearch):
     @classmethod
     def constructor_jarticles(cls):
         nc = cls()
-        nc.construct_collection(ARTICLES_COLLECTION)
+        nc.construct_mcollection(ARTICLES_COLLECTION)
         return nc
 
     @classmethod

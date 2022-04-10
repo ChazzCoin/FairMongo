@@ -31,7 +31,7 @@ class jSearch(MCollection):
 
     def find_records_where_date(self, date: str, toDict=False) -> cursor or dict:
         """ -> RETURN Cursor of all Records for Date. <- """
-        result = self.collection.query(JQ.DATE(date))
+        result = self.base_query(JQ.DATE(date))
         if toDict:
             return MCore.to_counted_dict(result)
         else:

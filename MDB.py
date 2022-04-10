@@ -1,5 +1,4 @@
 from MCore import MCore
-from MCollection import MCollection
 
 """ 
     -> This is a "Static" Instance of the Database for all to use.
@@ -14,9 +13,3 @@ def GET_COLLECTION(collection_name):
     if DEFAULT_HOST_INSTANCE:
         return DEFAULT_HOST_INSTANCE.get_collection(collection_name)
     return MCore.Collection(collection_name)
-
-# def GET_MCOLLECTION(collection_name):
-#     nc = MCollection.
-#     if DEFAULT_HOST_INSTANCE:
-#         return DEFAULT_HOST_INSTANCE.get_collection(collection_name)
-#     return MCore.Collection(collection_name)

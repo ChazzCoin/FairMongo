@@ -23,7 +23,7 @@ class jSource(MCollection):
     @classmethod
     def source_constructor(cls):
         nc = cls()
-        nc.construct_collection(SOURCES_COLLECTION)
+        nc.construct_mcollection(SOURCES_COLLECTION)
         return nc
 
     @classmethod
@@ -59,7 +59,7 @@ class jSource(MCollection):
 
 if __name__ == '__main__':
     n = jSource.source_constructor()
-    c = n.collection.estimated_document_count()
+    c = n.mcollection.estimated_document_count()
     # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
     # n.add_urls(temp)
     print(c)

@@ -58,6 +58,10 @@ def parse_cli_commands(mess: str):
             i += 1
     return directory_command, filter_commands
 
+if __name__ == '__main__':
+    coms = "matterport --date March 22 2022"
+    parse_cli_commands(coms)
+
 def build_query(search_term, filters):
     sq = JQ.SEARCH_ALL(search_term=search_term)
     if not filters:
