@@ -1,9 +1,6 @@
-import time
-
 from Futils import URL
 from MCollection import MCollection
 from MQuery import Q
-import MDB
 from Futils.rsLogger.CoreLogger import Log
 Log = Log("jURL")
 
@@ -29,7 +26,7 @@ class jURL(MCollection):
     @classmethod
     def url_constructor(cls):
         nc = cls()
-        nc.collection = MDB.GET_COLLECTION(URLS_COLLECTION)
+        nc.construct_collection(URLS_COLLECTION)
         return nc
 
     """ -> QUEUED (000) <- """
@@ -86,13 +83,13 @@ class jURL(MCollection):
 
 
 if __name__ == '__main__':
-    jURL.ADD_TO_QUEUED("www.bullyshit.com")
-    time.sleep(5)
-    jURL.UPDATE_TO_SUCCESS("www.bullyshit.com")
-    time.sleep(5)
-    jURL.UPDATE_TO_FAILED("www.bullyshit.com")
-    time.sleep(5)
+    # jURL.ADD_TO_QUEUED("www.bullyshit.com")
+    # time.sleep(5)
+    # jURL.UPDATE_TO_SUCCESS("www.bullyshit.com")
+    # time.sleep(5)
+    # jURL.UPDATE_TO_FAILED("www.bullyshit.com")
+    # time.sleep(5)
     j = jURL.url_constructor()
-    j.remove_record(url="www.bullshity.com")
-    print("temp")
+    # j.remove_record(url="www.bullshity.com")
+    print(j.collection.count())
     # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]

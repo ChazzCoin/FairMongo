@@ -21,10 +21,10 @@ Log = Log(f"MCore")
 """
 
 class MCore(QBuilder):
-    connection_status = False
-    client: MongoClient
-    db: Database
-    collection: Database = False
+    core_connection_status = False
+    core_client: MongoClient
+    core_db: Database
+    core_collection: Database = False
 
     def construct_fig_host_database(self, hostName, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {hostName} ], DATABASE=[ {databaseName} ]"
@@ -32,13 +32,13 @@ class MCore(QBuilder):
         fig_host_uri = fig.get_server_environment_uri_for_host_name(hostName)
         if fig_host_uri:
             try:
-                self.client = MongoClient(fig_host_uri)
+                self.core_client = MongoClient(fig_host_uri)
                 self.is_connected()
             except Exception as e:
                 Log.e(f"Unable to initiate MongoDB: HOST=[ {fig.db_environment_name} ]", error=e)
                 return False
             if databaseName:
-                self.db = self.client.get_database(databaseName)
+                self.core_db = self.core_client.get_database(databaseName)
             return self
         return False
 
@@ -46,34 +46,34 @@ class MCore(QBuilder):
         Log.className = f"MCore HOST=[ {fig.db_environment_name} ], DATABASE=[ {databaseName} ]"
         Log.i(f"Initiating MongoDB: URI={url}")
         try:
-            self.client = MongoClient(url)
+            self.core_client = MongoClient(url)
             self.is_connected()
         except Exception as e:
             Log.e(f"Unable to initiate MongoDB: URI={url}", error=e)
             return False
-        self.db = self.client.get_database(databaseName)
+        self.core_db = self.core_client.get_database(databaseName)
         return self
 
     def is_connected(self) -> bool:
         try:
-            info = self.client.server_info()
+            info = self.core_client.server_info()
             if info:
                 Log.d("MongoDB is Up.")
-                self.connection_status = True
+                self.core_connection_status = True
                 return True
         except Exception as e:
             Log.e("MongoDB is Down.", error=e)
-            self.connection_status = False
+            self.core_connection_status = False
             return False
         return False
 
-    def base_query(self, kwargs, page=0, limit=100):
-        if not self.collection:
+    def core_query(self, kwargs, page=0, limit=100):
+        if not self.core_collection:
             return False
         if limit:
-            results = self.collection.find(kwargs).skip(page).limit(limit)
+            results = self.core_collection.find(kwargs).skip(page).limit(limit)
         else:
-            results = self.collection.find(kwargs)
+            results = self.core_collection.find(kwargs)
         results = MCore.to_list(results)
         if results and len(results) > 0:
             return results
@@ -111,8 +111,8 @@ class MCore(QBuilder):
         INTERNAL/PRIVATE ONLY
         - DO NOT USE -
         """
-        self.collection = self.db.get_collection(collection_name)
-        return self.collection
+        self.core_collection = self.core_db.get_collection(collection_name)
+        return self.core_collection
 
     """ OUT of database -> OFFICIAL DATE CONVERSION FROM DATABASE ENTRY <- """
     @staticmethod

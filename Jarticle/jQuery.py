@@ -1,10 +1,10 @@
 from pymongo import cursor
-from Jarticle import jArticles
+from MCollection import MCollection
 from MCore import MCore
 from MQuery import Q
 from Jarticle.jHelper import JQ, F
 
-class jSearch(jArticles):
+class jSearch(MCollection):
 
     """
         -> Article Extension for Specifically Search Functionality.

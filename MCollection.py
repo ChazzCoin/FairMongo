@@ -1,11 +1,9 @@
 import time
-
 import MDB
 import fig
 from Futils import DICT, LIST
 from MCore import MCore
 from Futils.rsLogger.CoreLogger import Log
-from pymongo.database import Database
 Log = Log("MCollection")
 
 """
@@ -16,8 +14,8 @@ Log = Log("MCollection")
 """
 
 class MCollection(MCore):
-    collection_name: str = None
-    collection = None
+    mcollection_name: str = None
+    mcollection = None
 
     @classmethod
     def GET_SOZIN(cls):
@@ -36,20 +34,20 @@ class MCollection(MCore):
             nc.construct_fig_host_database(hostName, databaseName=fig.db_name)
         # -> if provided collection -> forcing it though
         if collectionName:
-            nc.private_set_collection(collectionName)
+            nc.construct_mcollection(collectionName)
         return nc
 
-    def private_set_collection(self, collection_or_name):
-        self.collection_name = str(collection_or_name)
-        if not self.collection:
-            self.collection = MDB.GET_COLLECTION(collection_or_name)
+    def construct_mcollection(self, collection_or_name):
+        self.mcollection_name = str(collection_or_name)
+        if not self.mcollection:
+            self.mcollection = MDB.GET_COLLECTION(collection_or_name)
 
     def is_valid(self) -> bool:
         if not self.is_connected():
             return False
-        if not self.collection:
+        if not self.mcollection:
             return False
-        if not self.db.validate_collection(self.collection):
+        if not self.core_db.validate_collection(self.mcollection):
             return False
         return True
 
@@ -58,9 +56,18 @@ class MCollection(MCore):
         return DICT.get(key, value, default=default)
 
     def get_document_count(self):
-        res = self.collection.find({})
-        if res:
-            return len(list(res))
+        return self.mcollection.estimated_document_count()
+
+    def base_query(self, kwargs, page=0, limit=100):
+        if not self.mcollection:
+            return False
+        if limit:
+            results = self.mcollection.find(kwargs).skip(page).limit(limit)
+        else:
+            results = self.mcollection.find(kwargs)
+        results = MCore.to_list(results)
+        if results and len(results) > 0:
+            return results
         return False
 
     def record_exists(self, recordIn) -> bool:
@@ -84,35 +91,45 @@ class MCollection(MCore):
     def insert_record(self, kwargs):
         try:
             time.sleep(1)
-            self.collection.insert_one(kwargs)
-            Log.s(f"NEW Record created in DB=[ {self.collection_name} ]")
+            self.mcollection.insert_one(kwargs)
+            Log.s(f"NEW Record created in DB=[ {self.mcollection_name} ]")
             return True
         except Exception as e:
-            Log.e(f"Failed to save record in DB=[ {self.collection_name} ]", error=e)
+            Log.e(f"Failed to save record in DB=[ {self.mcollection_name} ]", error=e)
             return False
 
-    def update_record(self, findQuery, updateQuery, upsert=True):
+    def update_record(self, findQuery: dict, updateQuery: dict, upsert=True):
         try:
             time.sleep(1)
-            self.collection.update_one( findQuery, updateQuery, upsert=upsert )
-            Log.s(f"UPDATED Record in DB=[ {self.collection_name} ]")
+            self.mcollection.update_one( findQuery, updateQuery, upsert=upsert )
+            Log.s(f"UPDATED Record in DB=[ {self.mcollection_name} ]")
             return True
         except Exception as e:
-            Log.e(f"Failed to save record in DB=[ {self.collection_name} ]", error=e)
+            Log.e(f"Failed to save record in DB=[ {self.mcollection_name} ]", error=e)
             return False
 
-    def remove_record(self, **kwargs):
+    def update_many_records(self, findQuery: dict, updateQueries: list, upsert=True):
         try:
             time.sleep(1)
-            self.collection.delete_one(kwargs)
-            Log.s(f"Removed Record in DB=[ {self.collection_name} ]")
+            self.mcollection.update_many( findQuery, updateQueries, upsert=upsert )
+            Log.s(f"UPDATED Record in DB=[ {self.mcollection_name} ]")
             return True
         except Exception as e:
-            Log.e(f"Failed to remove record in DB=[ {self.collection_name} ]", error=e)
+            Log.e(f"Failed to save record in DB=[ {self.mcollection_name} ]", error=e)
+            return False
+
+    def remove_record(self, kwargs):
+        try:
+            time.sleep(1)
+            self.mcollection.delete_one(kwargs)
+            Log.s(f"Removed Record in DB=[ {self.mcollection_name} ]")
+            return True
+        except Exception as e:
+            Log.e(f"Failed to remove record in DB=[ {self.mcollection_name} ]", error=e)
             return False
 
 
 if __name__ == '__main__':
-    n = MCollection
-    n.construct_fig_host_collection(fig.HARK, "articles")
-    n.init_FIND(n.collection_name)
+    n = MCollection.construct_fig_host_collection(fig.HARK, "articles")
+    temp = n.get_document_count()
+    print(temp)

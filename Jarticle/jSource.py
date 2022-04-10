@@ -1,6 +1,5 @@
 from Futils import URL
 from MCollection import MCollection
-import MDB
 from Futils.rsLogger.CoreLogger import Log
 Log = Log("jURL")
 
@@ -24,7 +23,7 @@ class jSource(MCollection):
     @classmethod
     def source_constructor(cls):
         nc = cls()
-        nc.collection = MDB.GET_COLLECTION(SOURCES_COLLECTION)
+        nc.construct_collection(SOURCES_COLLECTION)
         return nc
 
     @classmethod
@@ -60,7 +59,8 @@ class jSource(MCollection):
 
 if __name__ == '__main__':
     n = jSource.source_constructor()
-    temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
-    n.add_urls(temp)
-    print(n)
+    c = n.collection.estimated_document_count()
+    # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
+    # n.add_urls(temp)
+    print(c)
     # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]

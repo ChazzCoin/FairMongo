@@ -1,7 +1,7 @@
 from Futils import LIST
 from Futils.rsLogger.CoreLogger import Log
 from Jarticle.jHelper import JQ, F
-from MCollection import MCollection
+from Jarticle.jQuery import jSearch
 from MQuery import Q
 
 Log = Log("jArticles")
@@ -9,43 +9,40 @@ Log = Log("jArticles")
 ARTICLES_COLLECTION = "articles"
 
 """ Master Class to work with Article Collection """
-class jArticles(MCollection):
+class jArticles(jSearch):
 
     @classmethod
     def constructor_jarticles(cls):
         nc = cls()
-        nc.init_FIND(ARTICLES_COLLECTION)
+        nc.construct_collection(ARTICLES_COLLECTION)
         return nc
 
     @classmethod
     def ADD_ARTICLES(cls, articles):
         """ [ CRUCIAL FUNCTION ] -> DO NOT REMOVE THIS METHOD! <- """
-        newCls = cls()
-        newCls.init_FIND(ARTICLES_COLLECTION)
+        newCls = jArticles.constructor_jarticles()
         newCls.add_articles(articles)
         return newCls
 
     @classmethod
     def GET_ARTICLES_BY_QUERY(cls, kwargs):
-        nc = cls()
-        nc.init_FIND(ARTICLES_COLLECTION)
+        nc = jArticles.constructor_jarticles()
         return nc.get_articles_by_date(kwargs)
 
     @classmethod
     def SEARCH_ARTICLES(cls, search_term, field_name="body", page=0, limit=5):
-        nc = cls()
-        nc.init_FIND(ARTICLES_COLLECTION)
+        nc = jArticles.constructor_jarticles()
         return nc.search_field(search_term, field_name, page=page, limit=limit)
 
     def get_articles_by_date_source(self, date, source_term):
         query = JQ.SEARCH_FIELD_BY_DATE(date, F.SOURCE, source_term)
-        return self.query(kwargs=query)
+        return self.base_query(kwargs=query)
 
     def get_articles_by_key_value(self, kwargs):
-        return self.query(kwargs=kwargs)
+        return self.base_query(kwargs=kwargs)
 
     def get_articles_by_date(self, date):
-        return self.query(kwargs=JQ.DATE(date))
+        return self.base_query(kwargs=JQ.DATE(date))
 
     def article_exists(self, article):
         Log.i(f"Checking if Article already exists in Database...")
@@ -61,7 +58,7 @@ class jArticles(MCollection):
         url_query = Q.BASE(F.URL, q_url)
         # Final Query
         final_query = Q.OR([url_query, body_query, title_date_query])
-        return self.query(kwargs=final_query)
+        return self.base_query(kwargs=final_query)
 
     def add_articles(self, list_of_articles):
         list_of_articles = LIST.flatten(list_of_articles)
