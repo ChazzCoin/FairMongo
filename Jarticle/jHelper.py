@@ -1,5 +1,9 @@
 from bson import ObjectId
+from datetime import datetime
 from MQuery import Q
+
+
+
 
 
 class F:
@@ -21,6 +25,16 @@ class F:
     URLS = "urls"
     CATEGORY = "category"
 
+class A:
+    SORT_BY_DATE = lambda strDate: [
+            { "$limit": 100 },
+            { "$addFields": { F.PUBLISHED_DATE: { "$toDate": strDate } } },
+            { "$sort": { F.PUBLISHED_DATE: 1 } }
+]
+    [
+        { "$match": { "size": "medium" } },
+        { "$group": { "_id": "$name" } }
+    ]
 
 class JQ:
     COUNT = lambda value: Q.BASE(F.COUNT, value)
@@ -36,7 +50,7 @@ class JQ:
                                           Q.BASE(F.SOURCE, Q.REGEX(search_term))]
     DATE = lambda dateStr: Q.OR([JQ.BASE_DATE(dateStr), JQ.PUBLISHED_DATE(dateStr)])
     DATE_LESS_THAN = lambda dateStr: JQ.DATE(Q.LESS_THAN_OR_EQUAL(dateStr))
-    DATE_GREATER_THAN = lambda dateStr: JQ.BASE_DATE(Q.GREATER_THAN_OR_EQUAL(dateStr))
+    DATE_GREATER_THAN = lambda dateStr: JQ.DATE(Q.GREATER_THAN_OR_EQUAL(dateStr))
     PUBLISHED_DATE_AND_URL = lambda date, url: Q.BASE_TWO(F.PUBLISHED_DATE, date, F.URL, url)
     SEARCH_FIELD_BY_DATE = lambda date, field, source_term: Q.BASE_TWO(F.PUBLISHED_DATE, date, field,
                                                                        Q.REGEX(source_term))

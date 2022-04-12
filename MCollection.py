@@ -61,7 +61,7 @@ class MCollection(MCore):
     def base_query(self, kwargs, page=0, limit=100):
         if not self.mcollection:
             return False
-        if limit:
+        if limit and page:
             results = self.mcollection.find(kwargs).skip(page).limit(limit)
         else:
             results = self.mcollection.find(kwargs)

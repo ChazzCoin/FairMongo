@@ -26,7 +26,7 @@ class jURL(MCollection):
     @classmethod
     def url_constructor(cls):
         nc = cls()
-        nc.construct_collection(URLS_COLLECTION)
+        nc.construct_mcollection(URLS_COLLECTION)
         return nc
 
     """ -> QUEUED (000) <- """

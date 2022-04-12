@@ -114,6 +114,18 @@ class MCore(QBuilder):
         self.core_collection = self.core_db.get_collection(collection_name)
         return self.core_collection
 
+    def get_mcollection(self, collection_name) -> Database:
+        """
+        INTERNAL/PRIVATE ONLY
+        - DO NOT USE -
+        """
+        self.core_collection = self.core_db.get_collection(collection_name)
+        return self.core_collection
+
+    @staticmethod
+    def parse_date_for_query(date: str) -> datetime:
+        return datetime.datetime.strptime(date, "%B %d %Y")
+
     """ OUT of database -> OFFICIAL DATE CONVERSION FROM DATABASE ENTRY <- """
     @staticmethod
     def from_db_date(str_date):

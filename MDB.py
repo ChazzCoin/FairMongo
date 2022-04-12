@@ -13,3 +13,6 @@ def GET_COLLECTION(collection_name):
     if DEFAULT_HOST_INSTANCE:
         return DEFAULT_HOST_INSTANCE.get_collection(collection_name)
     return MCore.Collection(collection_name)
+
+# def GET_MCOLLECTION(collection_name):
+#     return MCollection().construct_mcollection(collection_or_name=collection_name)

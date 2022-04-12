@@ -82,20 +82,20 @@ def parse_date(obj=None):
         print(e)
         return False
 
-def mongo_date_today():
+def mongo_date_today() -> str:
     obj = get_now_date()
     p_date = str(obj.strftime("%B")) + s + str(obj.strftime("%d")) + s + str(obj.strftime("%Y"))
     return p_date
 
-def get_current_year():
+def get_current_year() -> str:
     obj = get_now_date()
     return str(obj.strftime("%Y"))
 
-def get_current_month():
+def get_current_month() -> str:
     obj = get_now_date()
     return str(obj.strftime("%B"))
 
-def get_current_day():
+def get_current_day() -> str:
     obj = get_now_date()
     return str(obj.strftime("%d"))
 
@@ -121,7 +121,7 @@ def get_last_x_days(days):
         i -= 1
     return temp
 
-def to_hours_minutes_seconds(seconds):
+def to_hours_minutes_seconds(seconds) -> str:
     return str(datetime.timedelta(seconds=seconds))
 
 def add_months(startDate, months=1):

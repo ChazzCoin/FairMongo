@@ -8,7 +8,7 @@ setup(
     author='ChazzCoin',
     author_email='chazzcoin@gmail.com',
     license='BSD 2-clause',
-    packages=['Backup', 'CLI', 'Futils', 'Jarticle'],
+    packages=['Backup', 'CLI', 'Futils', 'Jarticle', 'System'],
     install_requires=['pymongo~=3.12.3', 'python-dateutil~=2.7.5'],
     classifiers=[
         'Development Status :: 1 - Planning',

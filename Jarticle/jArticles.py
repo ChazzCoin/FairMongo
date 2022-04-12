@@ -1,6 +1,6 @@
-from Futils import LIST
+from Futils import LIST, DATE
 from Futils.rsLogger.CoreLogger import Log
-from Jarticle.jHelper import JQ, F
+from Jarticle.jHelper import JQ, F, A
 from Jarticle.jQuery import jSearch
 from MQuery import Q
 
@@ -44,6 +44,19 @@ class jArticles(jSearch):
     def get_articles_by_date(self, date):
         return self.base_query(kwargs=JQ.DATE(date))
 
+    def get_articles_today(self):
+        return self.base_query(kwargs=JQ.DATE(self.get_now_date()))
+
+    def get_articles_last_day_not_empty(self):
+        startDate = self.get_now_date()
+        last20Days = DATE.get_range_of_dates(startDate, daysBack=20)
+        for date in last20Days:
+            results = self.base_query(kwargs=JQ.DATE(date))
+            if results:
+                return results
+        return False
+
+
     def article_exists(self, article):
         Log.i(f"Checking if Article already exists in Database...")
         q_date = self.get_arg(F.PUBLISHED_DATE, article)
@@ -69,6 +82,11 @@ class jArticles(jSearch):
                 self.insert_record(article)
             else:
                 Log.w("Article Exists in Database Already. Skipping...")
+        Log.w(f"Finished Article Queue.")
+
+    def update_article(self, _id, single_article):
+        Log.w(f"Beginning Article Queue. ID=[ {_id} ]")
+        self.update_record(JQ.ID(_id), single_article)
         Log.w(f"Finished Article Queue.")
 
 

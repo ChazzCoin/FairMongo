@@ -14,9 +14,13 @@ COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
 WELCOME = f"\n{LogColors.HEADER}Welcome to pyFongo Command Line!"
 PYMONGO_BASE = f"{LogColors.HEADER}MongoDB@pyFongo -> "
 PYMONGO_INPUT = lambda option: f"{LogColors.HEADER}MongoDB@pyFongo {option} -> "
+
 ENTER_SEARCH = "Enter Search Term: "
 SEARCHING = lambda search_term: f"Searching for: [ {search_term} ]"
+
+# -> todo: make this general to the section
 SEARCH_OPTIONS = "\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options\n"
+
 OPTIONS = {"1. Search -> Search Article Database.": ["1", "search", "articles"],
            "2. Get Collection -> Init collection to query.": ["2", "collection"],
            "X. Exit -> Quit pyFongo CLI": ["killThySelf"]}
@@ -56,7 +60,7 @@ class pyFongo:
 
     """ -> Master Commands <- """
     def collection(self):
-        cCollection.main_loop()
+        cCollection.main_loop(db=db)
 
     def search(self):
         return SearchArticles.restart_search()
