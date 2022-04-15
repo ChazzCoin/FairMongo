@@ -1,6 +1,6 @@
 from random import randrange
-from Futils import Language
-from Futils import DICT
+from fongUtils import Language
+from fongUtils import DICT
 from MQuery import Q
 from Jarticle.jQuery import JQ, jSearch
 

@@ -1,9 +1,9 @@
 import time
 import MDB
 import fig
-from Futils import DICT, LIST
+from fongUtils import DICT, LIST
 from MCore import MCore
-from Futils.rsLogger.CoreLogger import Log
+from fongUtils.fongLogger.CoreLogger import Log
 Log = Log("MCollection")
 
 """

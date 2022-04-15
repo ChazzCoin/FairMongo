@@ -1,4 +1,7 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+import os
+
+current = os.getcwd()
 
 setup(
     name='pyFongo',
@@ -8,7 +11,7 @@ setup(
     author='ChazzCoin',
     author_email='chazzcoin@gmail.com',
     license='BSD 2-clause',
-    packages=['Backup', 'CLI', 'Futils', 'Jarticle', 'System'],
+    packages=find_packages(),
     install_requires=['pymongo~=3.12.3', 'python-dateutil~=2.7.5'],
     classifiers=[
         'Development Status :: 1 - Planning',
@@ -17,5 +20,5 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
-    ],
+    ]
 )

@@ -1,3 +1,3 @@
-from Futils.rsLogger.CoreLogger import Log
-from Futils.rsLogger import LogColors
-from Futils.rsLogger import Futils
+from fongUtils.fongLogger.CoreLogger import Log
+from fongUtils.fongLogger import LogColors
+from fongUtils.fongLogger import Futils

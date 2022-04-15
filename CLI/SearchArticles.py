@@ -1,5 +1,5 @@
-from Futils import Regex, LIST
-from Futils.rsLogger import Log, LogColors
+from fongUtils import Regex, LIST
+from fongUtils.fongLogger import Log, LogColors
 from CLI import UserRequest, Commands
 from Jarticle.jArticles import jArticles
 

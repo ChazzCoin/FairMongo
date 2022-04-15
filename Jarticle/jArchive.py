@@ -1,7 +1,7 @@
-from Futils import LIST, DICT, DATE
+from fongUtils import LIST, DICT, DATE
 from Jarticle.jHelper import JQ
 from Jarticle.jArticles import jArticles
-from Futils.rsLogger.CoreLogger import Log
+from fongUtils.fongLogger.CoreLogger import Log
 from MCollection import MCollection
 Log = Log("jArchive")
 

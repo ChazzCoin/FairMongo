@@ -1,17 +1,21 @@
 from pymongo import MongoClient
 from pymongo.database import Database
-from Futils import DICT, DATE
-import fig
+
+import figFong as fig
+from fongUtils import DICT, DATE
 from dateutil import parser
-from Futils.rsLogger.CoreLogger import Log
+# from rsLogger.CoreLogger import Log
 import datetime
 
+# from Futils.rsLogger.CoreLogger import Log
+from fongUtils.fongLogger import CoreLogger
 from MQuery import QBuilder
+from fongCore.cCollection import CCollection
 
 s = " "
 DEFAULT_SERVER_ENVIRONMENT = fig.get_server_environment_uri()
 DEFAULT_DATABASE_NAME = fig.db_name
-Log = Log(f"MCore")
+Log = CoreLogger.Log(f"MCore")
 
 """
     -> THE MASTER BASE CLASS
@@ -20,7 +24,7 @@ Log = Log(f"MCore")
     -> Other Classes inherent this object.
 """
 
-class MCore(QBuilder):
+class MCore(QBuilder, CCollection):
     core_connection_status = False
     core_client: MongoClient
     core_db: Database
@@ -67,18 +71,6 @@ class MCore(QBuilder):
             return False
         return False
 
-    def core_query(self, kwargs, page=0, limit=100):
-        if not self.core_collection:
-            return False
-        if limit:
-            results = self.core_collection.find(kwargs).skip(page).limit(limit)
-        else:
-            results = self.core_collection.find(kwargs)
-        results = MCore.to_list(results)
-        if results and len(results) > 0:
-            return results
-        return False
-
     @classmethod
     def Sozin(cls):
         nc = cls().constructor(fig.sozin_mongo_db_uri)
@@ -103,8 +95,14 @@ class MCore(QBuilder):
     @classmethod
     def Collection(cls, collection_name):
         nc = cls().constructor(fig.get_server_environment_uri())
-        collect: Database = nc.get_collection(collection_name)
-        return collect
+        nc.set_ccollection(collection_name)
+        return nc.core_collection
+
+    @classmethod
+    def SetCollection(cls, collection_name):
+        nc = cls().constructor(fig.get_server_environment_uri())
+        nc.set_ccollection(collection_name)
+        return nc
 
     def get_collection(self, collection_name) -> Database:
         """
@@ -114,13 +112,12 @@ class MCore(QBuilder):
         self.core_collection = self.core_db.get_collection(collection_name)
         return self.core_collection
 
-    def get_mcollection(self, collection_name) -> Database:
+    def set_ccollection(self, collection_name):
         """
         INTERNAL/PRIVATE ONLY
         - DO NOT USE -
         """
-        self.core_collection = self.core_db.get_collection(collection_name)
-        return self.core_collection
+        self.construct_cc(self.get_collection(collection_name))
 
     @staticmethod
     def parse_date_for_query(date: str) -> datetime:

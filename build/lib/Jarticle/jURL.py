@@ -1,8 +1,8 @@
-from Futils import LIST, DICT
+from fongUtils import LIST, DICT
 from Jarticle.jQuery import jSearch
 from MCollection import MCollection
 from MQuery import Q
-from Futils.rsLogger.CoreLogger import Log
+from fongUtils.fongLogger.CoreLogger import Log
 Log = Log("jURL")
 
 SOURCES_COLLECTION = "sources"

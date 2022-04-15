@@ -1,7 +1,7 @@
-from Futils import Regex
-from Futils.rsLogger import Log, LogColors
+from fongUtils import Regex
+from fongUtils.fongLogger import Log, LogColors
 # from MCollection import MCollection
-from CLI import UserRequest, SearchArticles, cCollection
+from CLI import UserRequest, SearchArticles, cliCollection
 from MDB import DEFAULT_HOST_INSTANCE
 
 Log = Log("Search", log_level=4)
@@ -60,7 +60,7 @@ class pyFongo:
 
     """ -> Master Commands <- """
     def collection(self):
-        cCollection.main_loop(db=db)
+        cliCollection.cliCollection().main_loop()
 
     def search(self):
         return SearchArticles.restart_search()

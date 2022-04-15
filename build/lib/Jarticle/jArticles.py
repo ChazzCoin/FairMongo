@@ -1,6 +1,6 @@
-from Futils import LIST
+from fongUtils import LIST
 from Jarticle import F, JQ
-from Futils.rsLogger.CoreLogger import Log
+from fongUtils.fongLogger.CoreLogger import Log
 from Jarticle.jQuery import jSearch
 from MCollection import MCollection
 from MQuery import Q

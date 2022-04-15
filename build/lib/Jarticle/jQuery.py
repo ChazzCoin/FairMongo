@@ -1,12 +1,13 @@
 from pymongo import cursor
+from MCollection import MCollection
 from MCore import MCore
-from MQuery import Find, Q
-from Jarticle import JQ, F
+from MQuery import Q
+from Jarticle.jHelper import JQ, F
 
-class jFind(Find):
+class jSearch(MCollection):
 
     """
-        -> Article Queries -> Helper Class for "j" classes.
+        -> Article Extension for Specifically Search Functionality.
     """
 
     def search_field(self, search_term, field_name, page=0, limit=100):
@@ -20,6 +21,10 @@ class jFind(Find):
     def search_unlimited(self, search_term):
         return self.base_query(kwargs=JQ.SEARCH_ALL(search_term), page=False, limit=False)
 
+    def search_unlimited_filters(self, search_term, filters):
+        kwargs = Q.AND([JQ.SEARCH_ALL(search_term), filters])
+        return self.base_query(kwargs=kwargs, page=False, limit=False)
+
     def search_before_or_after_date(self, search_term, date, page=0, limit=100, before=False):
         if before:
             return self.base_query(kwargs=JQ.SEARCH_ALL_BY_DATE_LTE(search_term, date), page=page, limit=limit)
@@ -30,7 +35,7 @@ class jFind(Find):
 
     def find_records_where_date(self, date: str, toDict=False) -> cursor or dict:
         """ -> RETURN Cursor of all Records for Date. <- """
-        result = self.collection.query(JQ.DATE(date))
+        result = self.base_query(JQ.DATE(date))
         if toDict:
             return MCore.to_counted_dict(result)
         else:

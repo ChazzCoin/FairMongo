@@ -1,6 +1,6 @@
 from random import randrange
-from Futils import Language
-from Futils import DICT
+from fongUtils import Language
+from fongUtils import DICT
 from MQuery import Q
 from Jarticle.jQuery import JQ
 
@@ -33,7 +33,7 @@ def parse_commands(mess: str):
             commands[directory_command] = input_commands
     return commands
 
-def parse_cli_commands(mess: str):
+def parse_cli_commands(mess: str) -> (str, dict):
     """ apple airpods --date march 22 2022"""
     tokenized_message = mess.split(" ")
     filter_commands = {}

@@ -1,5 +1,5 @@
-from Futils import LIST, DATE
-from Futils.rsLogger.CoreLogger import Log
+from fongUtils import LIST, DATE
+from fongUtils.fongLogger.CoreLogger import Log
 from Jarticle.jHelper import JQ, F, A
 from Jarticle.jQuery import jSearch
 from MQuery import Q

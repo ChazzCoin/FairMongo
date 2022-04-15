@@ -1,7 +1,7 @@
-from Futils import URL
+from fongUtils import URL
 from MCollection import MCollection
 from MQuery import Q
-from Futils.rsLogger.CoreLogger import Log
+from fongUtils.fongLogger.CoreLogger import Log
 Log = Log("jURL")
 
 F_STATUS = "status"
