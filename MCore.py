@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from pymongo.database import Database
 
-import figFong as fig
+import figFong
 from fongUtils import DICT, DATE
 from dateutil import parser
 # from rsLogger.CoreLogger import Log
@@ -13,8 +13,8 @@ from MQuery import QBuilder
 from fongCore.cCollection import CCollection
 
 s = " "
-DEFAULT_SERVER_ENVIRONMENT = fig.get_server_environment_uri()
-DEFAULT_DATABASE_NAME = fig.db_name
+DEFAULT_SERVER_ENVIRONMENT = figFong.get_server_environment_uri()
+DEFAULT_DATABASE_NAME = figFong.db_name
 Log = CoreLogger.Log(f"MCore")
 
 """
@@ -33,13 +33,13 @@ class MCore(QBuilder, CCollection):
     def construct_fig_host_database(self, hostName, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {hostName} ], DATABASE=[ {databaseName} ]"
         Log.i(f"Initiating MongoDB with Fig Host: {hostName}")
-        fig_host_uri = fig.get_server_environment_uri_for_host_name(hostName)
+        fig_host_uri = figFong.get_server_environment_uri_for_host_name(hostName)
         if fig_host_uri:
             try:
                 self.core_client = MongoClient(fig_host_uri)
                 self.is_connected()
             except Exception as e:
-                Log.e(f"Unable to initiate MongoDB: HOST=[ {fig.db_environment_name} ]", error=e)
+                Log.e(f"Unable to initiate MongoDB: HOST=[ {figFong.db_environment_name} ]", error=e)
                 return False
             if databaseName:
                 self.core_db = self.core_client.get_database(databaseName)
@@ -47,7 +47,7 @@ class MCore(QBuilder, CCollection):
         return False
 
     def constructor(self, url=DEFAULT_SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
-        Log.className = f"MCore HOST=[ {fig.db_environment_name} ], DATABASE=[ {databaseName} ]"
+        Log.className = f"MCore HOST=[ {figFong.db_environment_name} ], DATABASE=[ {databaseName} ]"
         Log.i(f"Initiating MongoDB: URI={url}")
         try:
             self.core_client = MongoClient(url)
@@ -73,34 +73,34 @@ class MCore(QBuilder, CCollection):
 
     @classmethod
     def Sozin(cls):
-        nc = cls().constructor(fig.sozin_mongo_db_uri)
+        nc = cls().constructor(figFong.sozin_mongo_db_uri)
         if nc.is_connected():
             return nc
         return False
 
     @classmethod
     def ArchivePi(cls):
-        nc = cls().constructor(fig.archivepi_mongo_db_uri)
+        nc = cls().constructor(figFong.archivepi_mongo_db_uri)
         if nc.is_connected():
             return nc
         return False
 
     @classmethod
     def Hark(cls):
-        nc = cls().constructor(fig.hark_mongo_db_uri)
+        nc = cls().constructor(figFong.hark_mongo_db_uri)
         if nc.is_connected():
             return nc
         return False
 
     @classmethod
     def Collection(cls, collection_name):
-        nc = cls().constructor(fig.get_server_environment_uri())
+        nc = cls().constructor(figFong.get_server_environment_uri())
         nc.set_ccollection(collection_name)
         return nc.core_collection
 
     @classmethod
     def SetCollection(cls, collection_name):
-        nc = cls().constructor(fig.get_server_environment_uri())
+        nc = cls().constructor(figFong.get_server_environment_uri())
         nc.set_ccollection(collection_name)
         return nc
 

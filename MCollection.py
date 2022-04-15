@@ -1,6 +1,6 @@
 import time
 import MDB
-import fig
+import figFong
 from fongUtils import DICT, LIST
 from MCore import MCore
 from fongUtils.fongLogger.CoreLogger import Log
@@ -31,7 +31,7 @@ class MCollection(MCore):
             nc.construct_fig_host_database(hostName, databaseName=databaseName)
         else:
             # -> Use Default Database.
-            nc.construct_fig_host_database(hostName, databaseName=fig.db_name)
+            nc.construct_fig_host_database(hostName, databaseName=figFong.db_name)
         # -> if provided collection -> forcing it though
         if collectionName:
             nc.construct_mcollection(collectionName)
@@ -130,6 +130,6 @@ class MCollection(MCore):
 
 
 if __name__ == '__main__':
-    n = MCollection.construct_fig_host_collection(fig.HARK, "articles")
+    n = MCollection.construct_fig_host_collection(figFong.HARK, "articles")
     temp = n.get_document_count()
     print(temp)
