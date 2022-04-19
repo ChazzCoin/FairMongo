@@ -1,7 +1,7 @@
 from pymongo import cursor
-from MCollection import MCollection
-from MCore import MCore
-from MQuery import Q
+from M.MCollection import MCollection
+from M.MCore import MCore
+from M.MQuery import Q
 from Jarticle.jHelper import JQ, F
 
 class jSearch(MCollection):

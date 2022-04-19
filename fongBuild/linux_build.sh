@@ -7,5 +7,5 @@ sudo python3 -m pip install --user --upgrade setuptools wheel
 # -> Setup Package
 sudo python3 setup.py sdist --format gztar bdist_wheel
 # -> Build/Install Package
-sudo python3 setup.py build --user
+sudo python3 setup.py build
 sudo python3 setup.py install --user

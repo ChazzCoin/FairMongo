@@ -1,6 +1,6 @@
-import MDB
+from M import MDB
 
-__version__ = "1.0.0"
+__version__ = "1.0.4"
 __author__ = 'ChazzCoin'
 __credits__ = 'Tiffany Systems'
 

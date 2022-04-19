@@ -1,7 +1,7 @@
 import time
 from pymongo.database import Database
 from fongUtils import LIST
-from fongUtils.fongLogger.CoreLogger import Log
+from fongUtils.LOGGER import Log
 Log = Log("MCollection")
 
 """

@@ -1,4 +1,4 @@
-from fongUtils.fongLogger.CoreLogger import Log
+from fongUtils.LOGGER import Log
 from fongUtils import LIST
 # from nltk import WordNetLemmatizer
 Log = Log("FAIR.Language")

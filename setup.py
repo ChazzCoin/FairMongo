@@ -4,10 +4,10 @@ import os
 current = os.getcwd()
 
 setup(
-    name='pyFongo',
-    version='1.0.0',
+    name='FairMongo',
+    version='1.0.4',
     description='A complete Python Package for PyMongo and MongoDB.',
-    url='https://github.com/chazzcoin/pyfongo',
+    url='https://github.com/chazzcoin/FairMongo',
     author='ChazzCoin',
     author_email='chazzcoin@gmail.com',
     license='BSD 2-clause',

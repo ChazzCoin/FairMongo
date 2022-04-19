@@ -1,11 +1,8 @@
 from fongUtils import LIST, DICT
 
-from fongUtils.fongLogger import Log
-# from MCollection import MCollection
+from fongUtils.LOGGER import Log
 from CLI import UserRequest, main, Commands
-from MCollection import MCollection
-from Jarticle.jArticles import jArticles
-import MDB
+from M import MDB
 from fongCore import cCollection
 
 Log = Log("cCollection")

@@ -1,4 +1,4 @@
-from fongUtils.fongLogger.CoreLogger import Log
+from fongUtils.LOGGER import Log
 Log = Log("LIST")
 
 """

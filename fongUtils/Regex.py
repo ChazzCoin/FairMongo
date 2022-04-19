@@ -1,6 +1,6 @@
 import re
-from . import DATE, LIST
-from fongUtils.fongLogger.CoreLogger import Log
+from fongUtils import DATE, LIST
+from fongUtils.LOGGER import Log
 Log = Log("FAIR.Regex")
 
 class R:

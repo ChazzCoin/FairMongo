@@ -1,8 +1,8 @@
 from fongUtils import LIST, DICT, DATE
 from Jarticle.jHelper import JQ
 from Jarticle.jArticles import jArticles
-from fongUtils.fongLogger.CoreLogger import Log
-from MCollection import MCollection
+from fongUtils.LOGGER import Log
+from M.MCollection import MCollection
 Log = Log("jArchive")
 
 ARCHIVE_COLLECTION = "archive"

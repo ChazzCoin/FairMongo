@@ -1,7 +1,7 @@
 from random import randrange
 from fongUtils import Language
 from fongUtils import DICT
-from MQuery import Q
+from M.MQuery import Q
 from Jarticle.jQuery import JQ
 
 DASH_MODE = False

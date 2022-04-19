@@ -1,12 +1,12 @@
 from fongUtils import Regex, LIST
-from fongUtils.fongLogger import Log, LogColors
+from fongUtils import LOGGER
 from CLI import UserRequest, Commands
 from Jarticle.jArticles import jArticles
 
-Log = Log("SearchArticles")
+Log = LOGGER.Log("SearchArticles")
 
-WELCOME = f"\n{LogColors.HEADER}Welcome to pyFongo Command Line!"
-PYMONGO_INPUT = f"{LogColors.HEADER}MongoDB@pyFongo -> "
+WELCOME = f"\n{LOGGER.HEADER}Welcome to pyFongo Command Line!"
+PYMONGO_INPUT = f"{LOGGER.HEADER}MongoDB@pyFongo -> "
 ENTER_SEARCH = "Enter Search Term: "
 SEARCHING = lambda search_term: f"Searching for: [ {search_term} ]"
 SEARCH_OPTIONS = "\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options\n"
@@ -51,7 +51,7 @@ def search_loop(records):
 
     while processing:
         if current_page > total_pages:
-            Log.cli(f"{LogColors.HEADER}\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options")
+            Log.cli(f"{LOGGER.HEADER}\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options")
             user_in = UserRequest.user_request(PYMONGO_INPUT)
             if not handle_search_input(user_in, False):
                 return
@@ -65,12 +65,12 @@ def search_loop(records):
 
         # -> Prepare for next input
         if current_page >= total_pages:
-            Log.cli(f"{LogColors.HEADER}\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options")
+            Log.cli(f"{LOGGER.HEADER}\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options")
             user_in = UserRequest.user_request(PYMONGO_INPUT)
             if not handle_search_input(user_in, False):
                 return
         else:
-            Log.cli(f"{LogColors.HEADER}\n1. Next Page - 2. New Search - 3. Exit - 4. Back/Options")
+            Log.cli(f"{LOGGER.HEADER}\n1. Next Page - 2. New Search - 3. Exit - 4. Back/Options")
             user_in = UserRequest.user_request(PYMONGO_INPUT)
         if not handle_search_input(user_in, True):
             return

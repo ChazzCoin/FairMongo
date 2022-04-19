@@ -2,7 +2,7 @@ import re
 import requests
 from fongUtils import Regex as Re
 from fongUtils import LIST, Regex
-from fongUtils.fongLogger.CoreLogger import Log
+from fongUtils.LOGGER import Log
 
 Log = Log("pyFongo.Futils.URL")
 

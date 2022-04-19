@@ -1,4 +1,4 @@
-from fongUtils.fongLogger import LogColors
+from fongUtils import LOGGER
 
 def user_request(request):
-    return input(f"{LogColors.HEADER}{request}")
+    return input(f"{LOGGER.HEADER}{request}")

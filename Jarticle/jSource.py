@@ -1,6 +1,6 @@
 from fongUtils import URL
-from MCollection import MCollection
-from fongUtils.fongLogger.CoreLogger import Log
+from M.MCollection import MCollection
+from fongUtils.LOGGER import Log
 Log = Log("jURL")
 
 SOURCES_COLLECTION = "sources"

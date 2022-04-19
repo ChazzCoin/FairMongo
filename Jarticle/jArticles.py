@@ -1,8 +1,8 @@
 from fongUtils import LIST, DATE
-from fongUtils.fongLogger.CoreLogger import Log
-from Jarticle.jHelper import JQ, F, A
+from fongUtils.LOGGER import Log
+from Jarticle.jHelper import JQ, F
 from Jarticle.jQuery import jSearch
-from MQuery import Q
+from M.MQuery import Q
 
 Log = Log("jArticles")
 

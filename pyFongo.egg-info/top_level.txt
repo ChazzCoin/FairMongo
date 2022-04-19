@@ -1,6 +1,0 @@
-CLI
-Jarticle
-System
-fongBackup
-fongCore
-fongUtils

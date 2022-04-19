@@ -1,19 +1,18 @@
 from fongUtils import Regex
-from fongUtils.fongLogger import Log, LogColors
-# from MCollection import MCollection
+from fongUtils import LOGGER
 from CLI import UserRequest, SearchArticles, cliCollection
-from MDB import DEFAULT_HOST_INSTANCE
+from M.MDB import DEFAULT_HOST_INSTANCE
 
-Log = Log("Search", log_level=4)
+Log = LOGGER.Log("Search", log_level=4)
 
 db = DEFAULT_HOST_INSTANCE
 
 RAW_COLLECTIONS = list(db.core_db.list_collections())
 COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
 
-WELCOME = f"\n{LogColors.HEADER}Welcome to pyFongo Command Line!"
-PYMONGO_BASE = f"{LogColors.HEADER}MongoDB@pyFongo -> "
-PYMONGO_INPUT = lambda option: f"{LogColors.HEADER}MongoDB@pyFongo {option} -> "
+WELCOME = f"\n{LOGGER.HEADER}Welcome to pyFongo Command Line!"
+PYMONGO_BASE = f"{LOGGER.HEADER}MongoDB@pyFongo -> "
+PYMONGO_INPUT = lambda option: f"{LOGGER.HEADER}MongoDB@pyFongo {option} -> "
 
 ENTER_SEARCH = "Enter Search Term: "
 SEARCHING = lambda search_term: f"Searching for: [ {search_term} ]"
