@@ -1,1 +1,1 @@
-from . import figFong
+from config import figFong

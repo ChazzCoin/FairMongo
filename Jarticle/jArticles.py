@@ -56,7 +56,6 @@ class jArticles(jSearch):
                 return results
         return False
 
-
     def article_exists(self, article):
         Log.i(f"Checking if Article already exists in Database...")
         q_date = self.get_arg(F.PUBLISHED_DATE, article)
