@@ -1,6 +1,6 @@
 from random import randrange
-from fongUtils import Language
-from fongUtils import DICT
+from fairNLP import Language
+from FSON import DICT
 from M.MQuery import Q
 from Jarticle.jQuery import JQ
 

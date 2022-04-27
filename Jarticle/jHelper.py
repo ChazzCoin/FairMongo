@@ -2,9 +2,6 @@ from bson import ObjectId
 from M.MQuery import Q
 
 
-
-
-
 class F:
     THIS = lambda field: f"this.{field}"
     ID = "_id"

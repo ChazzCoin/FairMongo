@@ -1,7 +1,7 @@
-from fongUtils import URL
+from fairNLP import URL
 from M.MCollection import MCollection
 from M.MQuery import Q
-from fongUtils.LOGGER import Log
+from FLog.LOGGER import Log
 Log = Log("jURL")
 
 F_STATUS = "status"

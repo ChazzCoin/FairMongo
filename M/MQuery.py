@@ -1,5 +1,5 @@
 import json
-from fongUtils.LOGGER import Log
+from FLog.LOGGER import Log
 
 Log = Log("MQuery")
 

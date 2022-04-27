@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../FairNLP/.idea/FAIR.iml" filepath="$PROJECT_DIR$/../FairNLP/.idea/FAIR.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../FCoRE/.idea/FCoRE.iml" filepath="$PROJECT_DIR$/../FCoRE/.idea/FCoRE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../FairWeb/.idea/FairWeb.iml" filepath="$PROJECT_DIR$/../FairWeb/.idea/FairWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../FairPICS/.idea/Fopics.iml" filepath="$PROJECT_DIR$/../FairPICS/.idea/Fopics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../TiffanySystems/.idea/TiffanySystems.iml" filepath="$PROJECT_DIR$/../../TiffanySystems/.idea/TiffanySystems.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/pyFongo.iml" filepath="$PROJECT_DIR$/.idea/pyFongo.iml" />
     </modules>
   </component>

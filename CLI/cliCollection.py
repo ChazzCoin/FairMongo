@@ -1,9 +1,9 @@
-from fongUtils import LIST, DICT
-
-from fongUtils.LOGGER import Log
+from FSON import DICT
+from FList import LIST
+from FLog.LOGGER import Log
 from CLI import UserRequest, main, Commands
 from M import MDB
-from fongCore import cCollection
+from C import cCollection
 
 Log = Log("cCollection")
 

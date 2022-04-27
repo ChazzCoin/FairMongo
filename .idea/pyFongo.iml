@@ -4,5 +4,9 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="FAIR" />
+    <orderEntry type="module" module-name="Fopics" />
+    <orderEntry type="module" module-name="FairWeb" />
+    <orderEntry type="module" module-name="FCoRE" />
   </component>
 </module>

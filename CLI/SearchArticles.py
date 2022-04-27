@@ -1,5 +1,6 @@
-from fongUtils import Regex, LIST
-from fongUtils import LOGGER
+from fairNLP import Regex
+from FList import LIST
+from FLog import LOGGER
 from CLI import UserRequest, Commands
 from Jarticle.jArticles import jArticles
 

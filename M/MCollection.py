@@ -1,9 +1,10 @@
 import time
 from M import MDB
 from config import figFong
-from fongUtils import DICT, LIST
+from FSON import DICT
+from FList import LIST
 from M.MCore import MCore
-from fongUtils.LOGGER import Log
+from FLog.LOGGER import Log
 Log = Log("MCollection")
 
 """
@@ -130,6 +131,6 @@ class MCollection(MCore):
 
 
 if __name__ == '__main__':
-    n = MCollection.construct_fig_host_collection(figFong.HARK, "articles")
+    n = MCollection.construct_fig_host_collection(figFong.SOZIN, "articles")
     temp = n.get_document_count()
     print(temp)

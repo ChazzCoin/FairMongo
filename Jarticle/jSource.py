@@ -1,6 +1,6 @@
-from fongUtils import URL
+from fairNLP import URL
 from M.MCollection import MCollection
-from fongUtils.LOGGER import Log
+from FLog.LOGGER import Log
 Log = Log("jURL")
 
 SOURCES_COLLECTION = "sources"

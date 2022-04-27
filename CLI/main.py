@@ -1,5 +1,5 @@
-from fongUtils import Regex
-from fongUtils import LOGGER
+from fairNLP import Regex
+from FLog import LOGGER
 from CLI import UserRequest, SearchArticles, cliCollection
 from M.MDB import DEFAULT_HOST_INSTANCE
 
