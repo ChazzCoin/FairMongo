@@ -11,11 +11,11 @@ F_ORIGIN = "origin"
 F_SITE_NAME = "siteName"
 F_URL = "url"
 
-URL_TYPE = "url"
+URL_TYPE = "general url"
 RSS_TYPE = "rss"
-GOOGLE_TYPE = "google news source"
+GOOGLE_TYPE = "google news url"
 # USER_TYPE = "user added"
-FOPIC_ORIGIN = "tiffany fopic"
+FOPIC_ORIGIN = "FairPICS"
 COUNT = "count"
 
 class jSource(MCollection):
@@ -58,9 +58,7 @@ class jSource(MCollection):
         return self.add_records(query_list)
 
 if __name__ == '__main__':
-    n = jSource.source_constructor()
-    c = n.mcollection.estimated_document_count()
-    # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
-    # n.add_urls(temp)
-    print(c)
-    # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
+    from fopResources import get_google_sources
+    srs = get_google_sources()
+    for url in srs:
+        jSource.ADD_URL(url, urlType=GOOGLE_TYPE)

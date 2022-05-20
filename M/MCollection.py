@@ -62,7 +62,7 @@ class MCollection(MCore):
     def base_query(self, kwargs, page=0, limit=100):
         if not self.mcollection:
             return False
-        if limit and page:
+        if limit and page >= 0:
             results = self.mcollection.find(kwargs).skip(page).limit(limit)
         else:
             results = self.mcollection.find(kwargs)
@@ -103,6 +103,16 @@ class MCollection(MCore):
         try:
             time.sleep(1)
             self.mcollection.update_one( findQuery, updateQuery, upsert=upsert )
+            Log.s(f"UPDATED Record in DB=[ {self.mcollection_name} ]")
+            return True
+        except Exception as e:
+            Log.e(f"Failed to save record in DB=[ {self.mcollection_name} ]", error=e)
+            return False
+
+    def replace_record(self, findQuery: dict, updateQuery: dict, upsert=True):
+        try:
+            time.sleep(1)
+            self.mcollection.replace_one( findQuery, updateQuery, upsert=upsert )
             Log.s(f"UPDATED Record in DB=[ {self.mcollection_name} ]")
             return True
         except Exception as e:

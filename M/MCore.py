@@ -138,7 +138,7 @@ class MCore(QBuilder, CCollection):
 
     @staticmethod
     def get_now_date():
-        return DATE.get_now_date_dt()
+        return DATE.get_now_month_day_year_str()
 
     @staticmethod
     def parse_date(obj=None):

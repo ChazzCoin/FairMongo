@@ -26,6 +26,7 @@ class O:
     EACH = "$each"
     TYPE = "$type"
     EQUALS = "$eq"
+    NOT_EQUALS = "$ne"
     EXISTS = "$exists"
     NOT = "$not"
     SIZE = "$size"
@@ -49,12 +50,15 @@ class Q:
     LTE = lambda value: Q.BASE(O.LESS_THAN_OR_EQUAL, value)
     SIZE = lambda value: Q.BASE(O.SET, value)
     EQUALS = lambda value: Q.BASE(O.EQUALS, value)
+    NOT_EQUALS = lambda value: Q.BASE(O.NOT_EQUALS, value)
     SET = lambda field, list_value: Q.BASE(O.SET, Q.BASE(field, list_value))
     PULL = lambda value: Q.BASE(O.PULL, value)
     ADD_TO_SET = lambda field, list_value: Q.BASE(O.ADD_TO_SET, Q.BASE(field, Q.BASE(O.EACH, list_value)))
     LESS_THAN_OR_EQUAL = lambda value: Q.BASE(O.LESS_THAN_OR_EQUAL, value)
     GREATER_THAN_OR_EQUAL = lambda value: Q.BASE(O.GREATER_THAN_OR_EQUAL, value)
-
+    FIELD_EXISTENCE = lambda fieldName, doesExist: Q.BASE(fieldName, Q.BASE(O.EXISTS, doesExist))
+    FIELD_EQUALS = lambda field, value: Q.BASE(field, Q.EQUALS(value))
+    FIELD_NOT_EQUALS = lambda field, value: Q.BASE(field, Q.NOT_EQUALS(value))
 
 class QBuilder(Q, O, R):
     query_builder = {}

@@ -48,9 +48,18 @@ class jArticles(jSearch):
     def get_articles_today(self):
         return self.base_query(kwargs=JQ.DATE(self.get_now_date()))
 
+    def get_articles_no_category_by_date(self, date):
+        return self.base_query(kwargs=JQ.NO_CATEGORY_BY_DATE(date))
+
+    def get_only_articles_no_category_by_date(self, date):
+        return self.base_query(kwargs=JQ.ONLY_ARTICLES_NO_CAT_BY_DATE(date))
+
+    def get_only_articles_no_category(self):
+        return self.base_query(kwargs=JQ.ONLY_ARTICLES_NO_CAT, page=0, limit=1000)
+
     def get_articles_last_day_not_empty(self):
         startDate = self.get_now_date()
-        last20Days = DATE.get_range_of_dates(startDate, daysBack=20)
+        last20Days = DATE.get_range_of_dates_by_day(startDate, daysBack=20)
         for date in last20Days:
             results = self.base_query(kwargs=JQ.DATE(date))
             if results:
@@ -89,10 +98,15 @@ class jArticles(jSearch):
         self.update_record(JQ.ID(_id), single_article)
         Log.w(f"Finished Article Queue.")
 
+    def replace_article(self, _id, single_article):
+        Log.w(f"Beginning Article Queue. ID=[ {_id} ]")
+        self.replace_record(JQ.ID(_id), single_article)
+        Log.w(f"Finished Article Queue.")
 
 if __name__ == '__main__':
     c = jArticles.constructor_jarticles()
-    res = c.get_document_count()
-    print(res)
+    # res = c.get_document_count()
+    arts = c.get_only_articles_no_category()
+    print(arts)
 
 

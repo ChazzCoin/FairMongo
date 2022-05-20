@@ -90,6 +90,6 @@ if __name__ == '__main__':
     # jURL.UPDATE_TO_FAILED("www.bullyshit.com")
     # time.sleep(5)
     j = jURL.url_constructor()
+    j.AD
     # j.remove_record(url="www.bullshity.com")
-    print(j.collection.count())
     # temp = ["www.bullshit.com", "www.shit.com", "www.fuckme.com", "www.jack.com"]
