@@ -84,24 +84,24 @@ class jArticles(jSearch):
 
     def add_articles(self, list_of_articles):
         list_of_articles = LIST.flatten(list_of_articles)
-        Log.w(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
+        Log.d(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
         for article in list_of_articles:
             article_exists = self.article_exists(article)
             if not article_exists:
                 self.insert_record(article)
             else:
                 Log.w("Article Exists in Database Already. Skipping...")
-        Log.w(f"Finished Article Queue.")
+        Log.d(f"Finished Article Queue.")
 
     def update_article(self, _id, single_article):
-        Log.w(f"Beginning Article Queue. ID=[ {_id} ]")
+        Log.d(f"Beginning Article Queue. ID=[ {_id} ]")
         self.update_record(JQ.ID(_id), single_article)
-        Log.w(f"Finished Article Queue.")
+        Log.d(f"Finished Article Queue.")
 
     def replace_article(self, _id, single_article):
-        Log.w(f"Beginning Article Queue. ID=[ {_id} ]")
+        Log.d(f"Beginning Article Queue. ID=[ {_id} ]")
         self.replace_record(JQ.ID(_id), single_article)
-        Log.w(f"Finished Article Queue.")
+        Log.d(f"Finished Article Queue.")
 
 if __name__ == '__main__':
     c = jArticles.constructor_jarticles()

@@ -12,6 +12,7 @@ def get_parent_directory():
 LOCAL = "local"
 PROD = "prod"
 SOZIN = 'sozin'
+SOZINREMOTE = 'sozinremote'
 HARK = "hark"
 ARCHIVEPI = "archivepi"
 
@@ -59,6 +60,11 @@ sozin_mongo_port = "27017"
 sozin_mongo_password = ""
 sozin_mongo_db_uri = BASE_MONGO_URI(sozin_mongo_ip, sozin_mongo_port)
 
+sozin_remote_mongo_ip = "aokiromeo.duckdns.org"
+sozin_remote_mongo_port = "1214"
+sozin_remote_mongo_password = ""
+sozin_remote_mongo_db_uri = BASE_MONGO_URI(sozin_remote_mongo_ip, sozin_remote_mongo_port)
+
 archivepi_mongo_ip = "192.168.1.243"
 archivepi_mongo_port = "27017"
 archivepi_mongo_password = ""
@@ -85,6 +91,8 @@ def get_server_environment_uri():
         return local_mongo_db_uri
     elif db_environment_name == SOZIN:
         return sozin_mongo_db_uri
+    elif db_environment_name == SOZINREMOTE:
+        return sozin_remote_mongo_db_uri
     elif db_environment_name == ARCHIVEPI:
         return archivepi_mongo_db_uri
     elif db_environment_name == HARK:

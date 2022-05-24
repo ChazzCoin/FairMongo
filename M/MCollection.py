@@ -21,7 +21,7 @@ class MCollection(MCore):
     @classmethod
     def GET_SOZIN(cls):
         nc = cls()
-        nc.Sozin()
+        nc.SozinRemote()
         return nc
 
     @classmethod

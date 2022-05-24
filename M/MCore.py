@@ -78,6 +78,13 @@ class MCore(QBuilder, CCollection):
         return False
 
     @classmethod
+    def SozinRemote(cls):
+        nc = cls().constructor(MServers.sozin_remote_mongo_db_uri)
+        if nc.is_connected():
+            return nc
+        return False
+
+    @classmethod
     def ArchivePi(cls):
         nc = cls().constructor(MServers.archivepi_mongo_db_uri)
         if nc.is_connected():
