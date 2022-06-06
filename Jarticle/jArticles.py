@@ -42,7 +42,9 @@ class jArticles(jSearch):
     def get_articles_by_key_value(self, kwargs):
         return self.base_query(kwargs=kwargs)
 
-    def get_articles_by_date(self, date):
+    def get_articles_by_date(self, date, unlimited=False):
+        if unlimited:
+            return self.base_query_unlimited(kwargs=JQ.DATE(date))
         return self.base_query(kwargs=JQ.DATE(date))
 
     def get_articles_today(self):

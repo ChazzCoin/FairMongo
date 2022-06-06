@@ -1,6 +1,5 @@
 import time
-from M import MDB
-from config import figFong
+from M import MDB, MServers
 from FSON import DICT
 from FList import LIST
 from M.MCore import MCore
@@ -32,7 +31,7 @@ class MCollection(MCore):
             nc.construct_fig_host_database(hostName, databaseName=databaseName)
         else:
             # -> Use Default Database.
-            nc.construct_fig_host_database(hostName, databaseName=figFong.db_name)
+            nc.construct_fig_host_database(hostName, databaseName=MServers.db_name)
         # -> if provided collection -> forcing it though
         if collectionName:
             nc.construct_mcollection(collectionName)
@@ -66,6 +65,15 @@ class MCollection(MCore):
             results = self.mcollection.find(kwargs).skip(page).limit(limit)
         else:
             results = self.mcollection.find(kwargs)
+        results = MCore.to_list(results)
+        if results and len(results) > 0:
+            return results
+        return False
+
+    def base_query_unlimited(self, kwargs):
+        if not self.mcollection:
+            return False
+        results = self.mcollection.find(kwargs)
         results = MCore.to_list(results)
         if results and len(results) > 0:
             return results
@@ -141,6 +149,6 @@ class MCollection(MCore):
 
 
 if __name__ == '__main__':
-    n = MCollection.construct_fig_host_collection(figFong.SOZIN, "articles")
+    n = MCollection.construct_fig_host_collection(MServers.SOZIN, "articles")
     temp = n.get_document_count()
     print(temp)

@@ -6,7 +6,7 @@ from FDate import DATE
 from dateutil import parser
 import datetime
 
-from fongUtils.LOGGER import Log
+from FLog.LOGGER import Log
 from M.MQuery import QBuilder
 from C.CCollection import CCollection
 
