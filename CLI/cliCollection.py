@@ -3,7 +3,7 @@ from FList import LIST
 from FLog.LOGGER import Log
 from CLI import UserRequest, main, Commands
 from M import MDB
-from C import cCollection
+from C import CCollection
 
 Log = Log("cCollection")
 
@@ -63,10 +63,10 @@ class cliCollection:
 
 
     def get_collection_methods(self):
-        return self.get_method_names(cCollection.CCollection)
+        return self.get_method_names(CCollection.CCollection)
 
     def get_collection_func(self, func):
-        return getattr(cCollection.CCollection, func)
+        return getattr(CCollection.CCollection, func)
 
     def call_collection_method(self, func, args=None):
         attr_func = self.get_collection_func(func)

@@ -68,6 +68,12 @@ class jArticles(jSearch):
                 return results
         return False
 
+    @staticmethod
+    def sort_articles_by_score(articles, reversed=True):
+        Log.v(f"Sort Articles by Score.")
+        sorted_articles = sorted(articles, key=lambda k: k.get("score"), reverse=reversed)
+        return sorted_articles
+
     def article_exists(self, article):
         Log.i(f"Checking if Article already exists in Database...")
         q_date = self.get_arg(F.PUBLISHED_DATE, article)

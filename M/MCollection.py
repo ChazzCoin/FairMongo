@@ -37,6 +37,20 @@ class MCollection(MCore):
             nc.construct_mcollection(collectionName)
         return nc
 
+    @classmethod
+    def construct_manual_collection(cls, collectionName, hostName=MServers.db_environment_name, databaseName=MServers.db_name):
+        nc = cls()
+        if databaseName:
+            # -> if provided database name
+            nc.construct_fig_host_database(hostName, databaseName=databaseName)
+        else:
+            # -> Use Default Database.
+            nc.construct_fig_host_database(hostName, databaseName=MServers.db_name)
+        # -> if provided collection -> forcing it though
+        if collectionName:
+            nc.construct_mcollection(collectionName)
+        return nc
+
     def construct_mcollection(self, collection_or_name):
         self.mcollection_name = str(collection_or_name)
         if not self.mcollection:
@@ -149,6 +163,7 @@ class MCollection(MCore):
 
 
 if __name__ == '__main__':
-    n = MCollection.construct_fig_host_collection(MServers.SOZIN, "articles")
-    temp = n.get_document_count()
-    print(temp)
+    n = MCollection.construct_manual_collection("crypto_tickers")
+    n.add_records({"date": "Today", "BTC": 26.76})
+    # temp = n.get_document_count()
+    # print(temp)
