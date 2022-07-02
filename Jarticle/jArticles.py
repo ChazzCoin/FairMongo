@@ -1,3 +1,5 @@
+from FSON import DICT
+
 from FDate import DATE
 from FList import LIST
 from FLog.LOGGER import Log
@@ -26,6 +28,13 @@ class jArticles(jSearch):
         return newCls
 
     @classmethod
+    def UPDATE_ARTICLES(cls, articles):
+        """ [ CRUCIAL FUNCTION ] -> DO NOT REMOVE THIS METHOD! <- """
+        newCls = jArticles.constructor_jarticles()
+        newCls.update_article(articles)
+        return newCls
+
+    @classmethod
     def GET_ARTICLES_BY_QUERY(cls, kwargs):
         nc = jArticles.constructor_jarticles()
         return nc.get_articles_by_date(kwargs)
@@ -41,6 +50,21 @@ class jArticles(jSearch):
 
     def get_articles_by_key_value(self, kwargs):
         return self.base_query(kwargs=kwargs)
+
+    def get_articles_no_date(self, unlimited=False):
+        if unlimited:
+            return self.base_query_unlimited({"published_date": {"$eq": None}})
+        return self.base_query({"published_date": {"$eq": None}})
+
+    def get_articles_no_date_not_updated_today(self, unlimited=False):
+        today = DATE.mongo_date_today_str()
+        query1 = {"published_date": {"$eq": None}}
+        query2 = Q.FIELD_EXISTENCE("updatedDate", False)
+        query3 = Q.FIELD_NOT_EQUALS("updatedDate", today)
+        masterQuery = Q.OR([Q.AND([query1, query2]), Q.AND([query1, query3])])
+        if unlimited:
+            return self.base_query_unlimited(masterQuery)
+        return self.base_query(masterQuery)
 
     def get_articles_by_date(self, date, unlimited=False):
         if unlimited:
@@ -71,6 +95,10 @@ class jArticles(jSearch):
     @staticmethod
     def sort_articles_by_score(articles, reversed=True):
         Log.v(f"Sort Articles by Score.")
+        if type(articles) == list:
+            itemOne = LIST.get(0, articles, False)
+            if not itemOne:
+                return articles
         sorted_articles = sorted(articles, key=lambda k: k.get("score"), reverse=reversed)
         return sorted_articles
 
@@ -101,7 +129,20 @@ class jArticles(jSearch):
                 Log.w("Article Exists in Database Already. Skipping...")
         Log.d(f"Finished Article Queue.")
 
+    def update_articles(self, list_of_articles):
+        list_of_articles = LIST.flatten(list_of_articles)
+        Log.d(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
+        for article in list_of_articles:
+            _id = DICT.get("_id", article, "")
+            self.update_article(_id, article)
+        Log.d(f"Finished Article Queue.")
+
     def update_article(self, _id, single_article):
+        if not _id:
+            _id = DICT.get("_id", single_article, False)
+            if not _id:
+                Log.w(f"No _id found for Article. ID=[ {_id} ]")
+                return False
         Log.d(f"Beginning Article Queue. ID=[ {_id} ]")
         self.update_record(JQ.ID(_id), single_article)
         Log.d(f"Finished Article Queue.")
@@ -114,7 +155,7 @@ class jArticles(jSearch):
 if __name__ == '__main__':
     c = jArticles.constructor_jarticles()
     # res = c.get_document_count()
-    arts = c.get_only_articles_no_category()
+    arts = c.get_articles_no_date_not_updated_today(unlimited=True)
     print(arts)
 
 

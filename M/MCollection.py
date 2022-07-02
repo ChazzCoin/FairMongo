@@ -163,7 +163,7 @@ class MCollection(MCore):
 
 
 if __name__ == '__main__':
-    n = MCollection.construct_manual_collection("crypto_tickers")
+    n = MCollection.construct_manual_collection(collectionName="test", hostName=MServers.PROD, databaseName="research")
     n.add_records({"date": "Today", "BTC": 26.76})
     # temp = n.get_document_count()
     # print(temp)

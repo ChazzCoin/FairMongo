@@ -16,6 +16,7 @@ def get_category(category):
 
 def get_categories(*categories):
     full_list = []
+    categories = LIST.flatten(categories)
     for cat in categories:
         temp = jdb.base_query(kwargs=JQ.CATEGORY(cat))
         full_list.append(temp)

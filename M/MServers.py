@@ -41,20 +41,22 @@ RESTORE:
 """
 
 """ -> SERVER INFO <- """
-db_environment_name = SOZIN
+db_environment_name = SOZINREMOTE
 db_name = "research"
 
 BASE_MONGO_URI = lambda mongo_ip, mongo_port: f"mongodb://{mongo_ip}:{mongo_port}"
+BASE_MONGO_AUTH_URI = lambda mongo_ip, mongo_port, user, pw: f"mongodb://{user}:{pw}@{mongo_ip}:{mongo_port}"
 
 local_mongo_ip = "localhost"
 local_mongo_port = "27017"
 local_mongo_db_uri = BASE_MONGO_URI(local_mongo_ip, local_mongo_port)
 
-# prod_mongo_ip = env.get_env("PROD_MONGO_IP")
-# prod_mongo_port = env.get_env("PROD_MONGO_PORT")
-# prod_mongo_password = env.get_env("PROD_MONGO_PASSWORD")
-# prod_mongo_db_uri = BASE_MONGO_URI(prod_mongo_ip, prod_mongo_port)
-#
+prod_mongo_ip = "mongo-master.cluster-cd13wonda0ju.us-east-1.docdb.amazonaws.com"
+prod_mongo_port = "27017"
+prod_mongo_user = "tiffany"
+prod_mongo_password = "sozin1913"
+prod_mongo_db_uri = BASE_MONGO_AUTH_URI(prod_mongo_ip, prod_mongo_port, prod_mongo_user, prod_mongo_password)
+
 sozin_mongo_ip = "192.168.1.180"
 sozin_mongo_port = "27017"
 sozin_mongo_password = ""
@@ -78,6 +80,8 @@ hark_mongo_db_uri = BASE_MONGO_URI(hark_mongo_ip, hark_mongo_port)
 def get_server_environment_uri_for_host_name(hostName):
     if hostName == LOCAL:
         return local_mongo_db_uri
+    elif hostName == PROD:
+        return prod_mongo_db_uri
     elif hostName == SOZIN:
         return sozin_mongo_db_uri
     elif hostName == ARCHIVEPI:
@@ -89,6 +93,8 @@ def get_server_environment_uri_for_host_name(hostName):
 def get_server_environment_uri():
     if db_environment_name == LOCAL:
         return local_mongo_db_uri
+    elif db_environment_name == PROD:
+        return prod_mongo_db_uri
     elif db_environment_name == SOZIN:
         return sozin_mongo_db_uri
     elif db_environment_name == SOZINREMOTE:
