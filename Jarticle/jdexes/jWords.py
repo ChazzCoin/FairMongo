@@ -1,10 +1,8 @@
 from FDate import DATE
-from FList import LIST
 from FSON import DICT
 from FLog.LOGGER import Log
-from Jarticle.jHelper import JQ, F
+from Jarticle import JQ
 from Jarticle.jQuery import jSearch
-from M.MQuery import Q
 
 Log = Log("jCompany")
 
