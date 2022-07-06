@@ -1,6 +1,0 @@
-C
-CLI
-Jarticle
-M
-Q
-System
