@@ -5,7 +5,7 @@ current = os.getcwd()
 
 setup(
     name='FairMongo',
-    version='1.2.0',
+    version='1.2.1',
     description='A complete Python Package for PyMongo and MongoDB.',
     url='https://github.com/chazzcoin/FairMongo',
     author='ChazzCoin',

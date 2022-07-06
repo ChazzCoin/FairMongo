@@ -154,8 +154,8 @@ class jArticles(jSearch):
 
 if __name__ == '__main__':
     c = jArticles.constructor_jarticles()
-    # res = c.get_document_count()
-    arts = c.get_articles_no_date_not_updated_today(unlimited=True)
-    print(arts)
+    res = c.get_document_count()
+    # res = c.get_articles_no_date(unlimited=True)
+    print(res)
 
 

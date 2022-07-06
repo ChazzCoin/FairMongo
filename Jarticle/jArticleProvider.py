@@ -3,6 +3,7 @@ from FSON import DICT
 from FDate import DATE
 from Jarticle.jArticles import jArticles
 from Jarticle.jHelper import JQ
+from M import Q
 jdb = jArticles.constructor_jarticles()
 
 def get_article_count():
@@ -23,6 +24,19 @@ def get_categories(*categories):
     flattedList = LIST.flatten(full_list)
     sortedList = sort_articles_by_score(flattedList)
     return sortedList
+
+def get_categories_last_5_days(*categories):
+    dateRange = DATE.get_range_of_dates_by_day(DATE.mongo_date_today_str(), 5)
+    full_list = []
+    categories = LIST.flatten(categories)
+    for date in dateRange:
+        for cat in categories:
+            query = Q.AND([JQ.DATE(date), JQ.CATEGORY(cat)])
+            temp = jdb.base_query(kwargs=query)
+            full_list.append(temp)
+    flattedList = LIST.flatten(full_list)
+    # sortedList = sort_articles_by_score(flattedList)
+    return flattedList
 
 def get_search(searchTerm):
     return jdb.search_all(search_term=searchTerm)
@@ -88,5 +102,5 @@ def sort_articles_by_score(articles):
     return jdb.sort_articles_by_score(articles)
 
 if __name__ == '__main__':
-    test = get_sub_reddit("ripple")
+    test = get_categories_last_5_days("metaverse", "crypto")
     print(test)
