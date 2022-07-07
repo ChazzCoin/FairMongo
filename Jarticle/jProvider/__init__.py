@@ -1,29 +1,39 @@
-import jDate
-import jCategories
+from Jarticle.jProvider.jDate import jpDate
+from Jarticle.jProvider.jCategories import jpCat
+from Jarticle.jProvider.jSocial import jpSocial
 
-from Jarticle.jArticles import jArticles
-jdb = jArticles.constructor_jarticles()
+ARTICLES_COLLECTION = "articles"
 
-def get_article_count():
-    return jdb.get_document_count()
+class jPro(jpDate, jpCat, jpSocial):
 
-def get_search(searchTerm):
-    return jdb.search_all(search_term=searchTerm)
+    def __init__(self):
+        self.construct_mcollection(ARTICLES_COLLECTION)
 
-def get_articles_by_key_value(kwargs):
-    return jdb.base_query(kwargs=kwargs)
+    def get_article_count(self):
+        return self.get_document_count()
 
-def get_no_published_date(unlimited=False):
-    return jDate.get_articles_no_date(unlimited=unlimited)
+    def get_search(self, searchTerm):
+        return self.search_all(search_term=searchTerm)
 
-def get_no_published_date_not_updated_today(unlimited=False):
-    return jDate.get_articles_no_date_not_updated_today(unlimited=unlimited)
+    def get_articles_by_key_value(self, kwargs):
+        return self.base_query(kwargs=kwargs)
 
-def get_ready_to_enhance():
-    temp = jCategories.get_no_category_last_7_days()
-    if temp:
-        return temp
-    temp2 = jCategories.get_no_category_by_1000()
-    if temp2:
-        return temp2
-    return False
+    def get_no_published_date(self, unlimited=False):
+        return self.get_articles_no_date(unlimited=unlimited)
+
+    def get_no_published_date_not_updated_today(self, unlimited=False):
+        return self.get_articles_no_date_not_updated_today(unlimited=unlimited)
+
+    def get_ready_to_enhance(self):
+        temp = self.get_no_category_last_7_days()
+        if temp:
+            return temp
+        temp2 = self.get_no_category_by_1000()
+        if temp2:
+            return temp2
+        return False
+
+if __name__ == '__main__':
+    t = jPro()
+    p = t.get_twitter_days_back(5)
+    print(p)

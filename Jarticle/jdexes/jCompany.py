@@ -1,7 +1,7 @@
 from FList import LIST
 from FSON import DICT
 from FLog.LOGGER import Log
-from Jarticle.jQuery import jSearch
+from Jarticle import jSearch
 
 Log = Log("jCompany")
 

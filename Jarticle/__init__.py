@@ -96,7 +96,6 @@ class JQ:
     ONLY_ARTICLES_NO_CAT = Q.AND([NO_CATEGORY, NO_TWITTER, NO_REDDIT])
     GET_SUB_REDDIT = lambda subreddit: Q.AND([JQ.REDDIT, JQ.SUB_REDDIT(subreddit)])
 
-
 class jSearch(MCollection):
 
     """

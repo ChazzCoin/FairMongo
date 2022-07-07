@@ -31,11 +31,6 @@ class jArticles(jSearch):
         newCls.update_articles(articles)
         return newCls
 
-    # @classmethod
-    # def GET_ARTICLES_BY_QUERY(cls, kwargs):
-    #     nc = jArticles.constructor_jarticles()
-    #     return nc.get_articles_by_date(kwargs)
-
     @classmethod
     def SEARCH_ARTICLES(cls, search_term, field_name="body", page=0, limit=5):
         nc = jArticles.constructor_jarticles()
@@ -73,10 +68,10 @@ class jArticles(jSearch):
         Log.d(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
         for article in list_of_articles:
             _id = DICT.get("_id", article, "")
-            self.update_article(_id, article)
+            self.update_article(article, _id=_id)
         Log.d(f"Finished Article Queue.")
 
-    def update_article(self, _id, single_article):
+    def update_article(self, single_article, _id=None):
         if not _id:
             _id = DICT.get("_id", single_article, False)
             if not _id:
