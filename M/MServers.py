@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from pymongo.server_description import ServerDescription
 
 # -> MASTER PATH <- #
 MASTER_PATH = os.getcwd()
@@ -103,3 +104,13 @@ def get_server_environment_uri():
         return archivepi_mongo_db_uri
     elif db_environment_name == HARK:
         return hark_mongo_db_uri
+
+def get_retry_queue():
+    ss_list = []
+    ss_list.append(sozin_mongo_db_uri)
+    ss_list.append(sozin_remote_mongo_db_uri)
+    ss_list.append(hark_mongo_db_uri)
+    ss_list.append(local_mongo_db_uri)
+    ss_list.append(prod_mongo_db_uri)
+    return ss_list
+

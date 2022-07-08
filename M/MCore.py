@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+
 from pymongo.database import Database
 from M import MServers
 from FSON import DICT
@@ -21,6 +22,14 @@ Log = Log(f"MCore")
     -> Does not need a collection to be initiated.
     -> Other Classes inherent this object.
 """
+def server_selector(server_descriptions):
+    servers = [
+        server for server in server_descriptions
+        if server.address[0] == 'localhost'
+    ]
+    if not servers:
+        return server_descriptions
+    return servers
 
 class MCore(QBuilder, CCollection):
     core_connection_status = False
@@ -31,15 +40,21 @@ class MCore(QBuilder, CCollection):
     # -> !!MAIN CONSTRUCTOR!! <-
     def constructor(self, url=DEFAULT_SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {MServers.db_environment_name} ], DATABASE=[ {databaseName} ]"
-        Log.i(f"Initiating MongoDB: URI={url}")
-        try:
-            self.core_client = MongoClient(url)
-            self.is_connected()
-        except Exception as e:
-            Log.e(f"Unable to initiate MongoDB: URI={url}", error=e)
-            return False
-        self.core_db = self.core_client.get_database(databaseName)
-        return self
+        qu = MServers.get_retry_queue()
+        for u in qu:
+            try:
+                Log.i(f"Initiating MongoDB: URI={url}")
+                self.core_client = MongoClient(host=u, connectTimeoutMS=3, serverSelectionTimeoutMS=3)
+                if not self.core_client:
+                    continue
+                if self.is_connected():
+                    self.core_db = self.core_client.get_database(databaseName)
+                    return self
+            except Exception as e:
+                Log.e(f"Unable to initiate MongoDB: URI={url}", error=e)
+                continue
+        return False
+
 
     def construct_fig_host_database(self, hostName, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {hostName} ], DATABASE=[ {databaseName} ]"
@@ -47,7 +62,7 @@ class MCore(QBuilder, CCollection):
         fig_host_uri = MServers.get_server_environment_uri_for_host_name(hostName)
         if fig_host_uri:
             try:
-                self.core_client = MongoClient(fig_host_uri)
+                self.core_client = MongoClient(fig_host_uri, connectTimeoutMS=10, server_selector=MServers.get_server_selection_list())
                 self.is_connected()
             except Exception as e:
                 Log.e(f"Unable to initiate MongoDB: HOST=[ {MServers.db_environment_name} ]", error=e)
@@ -175,3 +190,7 @@ class MCore(QBuilder, CCollection):
     @staticmethod
     def cursor_count(cursor) -> int:
         return len(list(cursor))
+
+if __name__ == '__main__':
+    c = MCore().constructor()
+    print(c)

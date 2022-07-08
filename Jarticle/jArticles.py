@@ -13,14 +13,20 @@ class jArticles(jSearch):
 
     @classmethod
     def constructor_jarticles(cls):
-        nc = cls()
-        nc.construct_mcollection(ARTICLES_COLLECTION)
-        return nc
+        try:
+            nc = cls()
+            nc.construct_mcollection(ARTICLES_COLLECTION)
+            return nc
+        except Exception as e:
+            Log.e("Failed to Connect to DB.", error=e)
+            return False
 
     @classmethod
     def ADD_ARTICLES(cls, articles):
         """ [ CRUCIAL FUNCTION ] -> DO NOT REMOVE THIS METHOD! <- """
         newCls = jArticles.constructor_jarticles()
+        if not newCls:
+            return False
         newCls.add_articles(articles)
         return newCls
 
@@ -28,6 +34,8 @@ class jArticles(jSearch):
     def UPDATE_ARTICLES(cls, articles):
         """ [ CRUCIAL FUNCTION ] -> DO NOT REMOVE THIS METHOD! <- """
         newCls = jArticles.constructor_jarticles()
+        if not newCls:
+            return False
         newCls.update_articles(articles)
         return newCls
 

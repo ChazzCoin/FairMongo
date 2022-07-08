@@ -2,7 +2,7 @@ from random import randrange
 from fairNLP import Language
 from FSON import DICT
 from M.MQuery import Q
-from Jarticle.jQuery import JQ
+from Jarticle import JQ
 
 DASH_MODE = False
 

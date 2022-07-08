@@ -35,5 +35,5 @@ class jPro(jpDate, jpCat, jpSocial):
 
 if __name__ == '__main__':
     t = jPro()
-    p = t.get_twitter_days_back(5)
+    p = t.get_article_count()
     print(p)
