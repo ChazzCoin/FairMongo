@@ -105,14 +105,17 @@ class jArticles(MCollection):
 
     def replace_articles(self, list_of_articles):
         list_of_articles = LIST.flatten(list_of_articles)
-        Log.d(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
+        Log.i(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
+        count = 1
         for article in list_of_articles:
+            Log.i(f"[ {count} ]")
             _id = DICT.get("_id", article, "")
             self.replace_article(article, _id=_id)
-        Log.d(f"Finished Article Queue.")
+            count += 1
+        Log.i(f"Finished Article Queue. Count=[ {count} ]")
 
     def replace_article(self, single_article, _id=None):
-        Log.d(f"Beginning Article Queue. ID=[ {_id} ]")
+        Log.i(f"replace_article. ID=[ {_id} ]")
         if not _id:
             _id = DICT.get("_id", single_article, "")
         if type(_id) not in [ObjectId]:
@@ -120,7 +123,7 @@ class jArticles(MCollection):
         else:
             q_id = { "_id": _id }
         self.replace_record(q_id, single_article)
-        Log.d(f"Finished Article Queue.")
+        Log.d(f"Finished replace_article.")
 
 if __name__ == '__main__':
     c = jArticles.constructor_jarticles()

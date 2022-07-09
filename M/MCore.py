@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-
+from pymongo import bulk
 from pymongo.database import Database
 from M import MServers
 from FSON import DICT
@@ -36,6 +36,7 @@ class MCore(QBuilder, CCollection):
     core_client: MongoClient
     core_db: Database
     core_collection: Database = False
+    core_bulk = bulk
 
     # -> !!MAIN CONSTRUCTOR!! <-
     def constructor(self, url=DEFAULT_SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):

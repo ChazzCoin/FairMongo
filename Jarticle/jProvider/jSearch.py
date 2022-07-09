@@ -1,7 +1,7 @@
 from FList import LIST
 from FSON import DICT
 from FDate import DATE
-from Jarticle import JQ
+from Jarticle import JQ, Pipelines
 from pymongo import cursor
 from Jarticle.jArticles import jArticles
 
@@ -9,6 +9,9 @@ class jpSearch(jArticles):
     """
             -> Article Extension for Specifically Search Functionality.
         """
+
+    def search_by_date_range(self, searchTerm, gte, lte, limit=1000):
+        return self.base_aggregate(Pipelines.SEARCH_BY_DATE_RANGE(searchTerm, gte, lte, limit), allowDiskUse=True)
 
     def search_field(self, search_term, field_name, page=0, limit=100):
         return self.base_query(kwargs=Q.SEARCH(field_name, search_term), page=page, limit=limit)

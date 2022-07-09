@@ -34,7 +34,13 @@ class O:
     i_OPTION = 'i'
     GREATER_THAN_OR_EQUAL = "$gte"
     LESS_THAN_OR_EQUAL = "$lte"
-
+    GTE = GREATER_THAN_OR_EQUAL
+    LTE = LESS_THAN_OR_EQUAL
+    MATCH = "$match"
+    GROUP = "$group"
+    TO_DATE = "$toDate"
+    ADD_FIELDS = "$addFields"
+    LIMIT = "$limit"
 
 class Q:
     BASE = lambda key, value: {key: value}

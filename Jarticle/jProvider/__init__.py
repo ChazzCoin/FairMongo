@@ -47,6 +47,9 @@ class jPro(jpSearch, jpDate, jpCat, jpSocial):
 
 if __name__ == '__main__':
     t = jPro()
-    p = t.add_pub_date()
+    # p = t.add_pub_date()
     # p = t.by_date_range_test()
+    # p = t.test_new_pub_date()
+    # p = t.new_search()
+    p = t.get_article_count()
     print(p)

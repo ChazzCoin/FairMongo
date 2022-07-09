@@ -1,4 +1,4 @@
-from Jarticle import JQ, F, A
+from Jarticle import JQ, F, Pipelines
 from FDate import DATE
 from FSON import DICT
 from Q import Q
@@ -12,7 +12,7 @@ class jpDate(jArticles):
     def add_pub_date(self):
         field_name = "pub_date"
         query = Q.FIELD_EXISTENCE(fieldName="pub_date", doesExist=False)
-        results = self.base_query(query, limit=10000)
+        results = self.base_query(query, limit=100000)
         newList = []
         for art in results:
             strDate = DICT.get("published_date", art, False)
@@ -21,15 +21,13 @@ class jpDate(jArticles):
             new_date = DATE.TO_DATETIME(strDate)
             art[field_name] = new_date
             newList.append(art)
-        print(newList)
         self.replace_articles(newList)
 
     def by_date_range_test(self):
-        less = "July 01 2022"
-        greater = "December 25 2021"
-        test = self.mcollection.aggregate(A.SORT_BY_DATE(greater, less))
+        less = "July 09 2022"
+        greater = "July 06 2022"
+        test = self.base_aggregate(Pipelines.BY_DATE_RANGE(greater, less, 500), allowDiskUse=True)
         print(test)
-
 
     def get_last_day_not_empty(self):
         return self.get_articles_last_day_not_empty()

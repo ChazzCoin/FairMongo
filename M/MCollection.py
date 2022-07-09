@@ -72,6 +72,15 @@ class MCollection(MCore):
     def get_document_count(self):
         return self.mcollection.estimated_document_count()
 
+    def base_aggregate(self, pipeline, allowDiskUse=True):
+        if not self.mcollection:
+            return False
+        results = self.mcollection.aggregate(pipeline, allowDiskUse=allowDiskUse)
+        results = MCore.to_list(results)
+        if results and len(results) > 0:
+            return results
+        return False
+
     def base_query(self, kwargs, page=0, limit=100):
         if not self.mcollection:
             return False
@@ -133,9 +142,9 @@ class MCollection(MCore):
 
     def replace_record(self, findQuery: dict, updateQuery: dict, upsert=True):
         try:
-            time.sleep(1)
+            # time.sleep(1)
             self.mcollection.replace_one( findQuery, updateQuery, upsert=upsert )
-            Log.s(f"UPDATED Record in DB=[ {self.mcollection_name} ]")
+            Log.s(f"REPLACED Record in DB=[ {self.mcollection_name} ]")
             return True
         except Exception as e:
             Log.e(f"Failed to save record in DB=[ {self.mcollection_name} ]", error=e)

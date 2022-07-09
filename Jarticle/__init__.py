@@ -1,5 +1,5 @@
 from bson import ObjectId
-from M.MQuery import Q
+from M.MQuery import Q, O
 from FDate import DATE
 
 
@@ -23,12 +23,59 @@ class F:
     URLS = "urls"
     CATEGORY = "category"
 
-class A:
-    SORT_BY_DATE = lambda strDateOldest, strDateNewest: [
-            { "$limit": 100 },
-            { "$match": { F.PUB_DATE: { "$gte": DATE.TO_DATETIME(strDateOldest), "$lte": DATE.TO_DATETIME(strDateNewest) } } }
+
+"""
+https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#std-label-aggregation-pipeline-operator-reference
+-> $match
+-> $group
+-> $sort
+"""
+
+class AO:
+
+    LIMIT = lambda value: {O.LIMIT: value}
+    MATCH_DATE_RANGE = lambda gte, lte: {
+        O.MATCH: {F.PUB_DATE: {O.GTE: DATE.TO_DATETIME(gte), O.LTE: DATE.TO_DATETIME(lte)}}}
+
+    MATCH_SEARCH = lambda searchTerm: { O.MATCH: JQ.SEARCH_ALL(search_term=searchTerm)}
+
+    ADD_PUB_DATE_FIELD = {"$addFields": {F.PUB_DATE: { "$toDate": "$published_date" } }}
+
+    MATCH_SINGLE_FIELD_VALUE = lambda field, value: {O.MATCH: {field: value}}
+    MATCH_SINGLE_FIELD_EXISTS = lambda field, exists: {O.MATCH: Q.FIELD_EXISTENCE(field, exists)}
+    LOOKUP = lambda fromCollection, localField, foreignField, outputName: {
+        "from": fromCollection,
+        "localField": localField,
+        "foreignField": foreignField,
+        "as": outputName
+    }
+    MERGE_INTO_COLLECTION = lambda collectionName: {"$merge": {"into": {"db": "research", "coll": collectionName}, "on": "_id", "whenMatched": "merge"}}
+    """
+    { "$dateToString": { "format": "%B %d %Y", "date": "$date" }
+    {  }
+    
+    { $merge : { into: { db: "research", coll: "articles" }, on: "_id",  whenMatched: "merge", whenNotMatched: "insert" } }
+    """
+class Pipelines:
+    # ADD_PUB_DATE = [
+    #     AO.MATCH_SINGLE_FIELD_EXISTS(field="pub_date", exists=False),
+    #     AO.LIMIT(10),
+    #     AO.ADD_PUB_DATE_FIELD,
+    #     AO.MERGE_INTO_COLLECTION("temp")
+    # ]
+    SEARCH_BY_DATE_RANGE = lambda searchTerm, gte, lte, limit: [
+            AO.MATCH_DATE_RANGE(gte, lte),
+            AO.MATCH_SEARCH(searchTerm),
+            AO.LIMIT(limit)
     ]
-    # { "$addFields": { F.PUBLISHED_DATE: { "$toDate": f"${F.PUBLISHED_DATE}" } } },
+    BY_DATE_RANGE = lambda gte, lte, limit: [
+            AO.MATCH_DATE_RANGE(gte, lte),
+            AO.LIMIT(limit)
+    ]
+
+    # ADD_FIELDS_TO_DATE = lambda field: { O.ADD_FIELDS: { F.PUBLISHED_DATE: { O.TO_DATE: f"${F.PUBLISHED_DATE}" } } }
+
+    # { "$addFields": { F.PUB_DATE: { "$toDate": f"${F.PUBLISHED_DATE}" } } },
     # { "$sort": { F.PUBLISHED_DATE: 1 } }
     # { $match: { F.PUBLISHED_DATE: { "$gte": DATE.TO_DATETIME(strDateOldest), "$lte": DATE.TO_DATETIME(strDateNewest) } } }
     # [
