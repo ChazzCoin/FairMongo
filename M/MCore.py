@@ -41,10 +41,15 @@ class MCore(QBuilder, CCollection):
     def constructor(self, url=DEFAULT_SERVER_ENVIRONMENT, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {MServers.db_environment_name} ], DATABASE=[ {databaseName} ]"
         qu = MServers.get_retry_queue()
-        for u in qu:
+        # count = len(qu)
+        # index = 0
+        for u in qu.keys():
+            # if count > index:
+            #     continue
+            # index += 1
             try:
                 Log.i(f"Initiating MongoDB: URI={url}")
-                self.core_client = MongoClient(host=u, connectTimeoutMS=3, serverSelectionTimeoutMS=3)
+                self.core_client = MongoClient(host=qu[u], connectTimeoutMS=10000)
                 if not self.core_client:
                     continue
                 if self.is_connected():

@@ -106,11 +106,12 @@ def get_server_environment_uri():
         return hark_mongo_db_uri
 
 def get_retry_queue():
-    ss_list = []
-    ss_list.append(sozin_mongo_db_uri)
-    ss_list.append(sozin_remote_mongo_db_uri)
-    ss_list.append(hark_mongo_db_uri)
-    ss_list.append(local_mongo_db_uri)
-    ss_list.append(prod_mongo_db_uri)
+    ss_list = {}
+    ss_list[1] = sozin_mongo_db_uri
+    ss_list[2] = sozin_mongo_db_uri
+    ss_list[3] = sozin_remote_mongo_db_uri
+    ss_list[4] = hark_mongo_db_uri
+    ss_list[5] = local_mongo_db_uri
+    ss_list[6] = prod_mongo_db_uri
     return ss_list
 
