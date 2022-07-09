@@ -1,10 +1,20 @@
 from Jarticle.jProvider.jDate import jpDate
 from Jarticle.jProvider.jCategories import jpCat
 from Jarticle.jProvider.jSocial import jpSocial
+from Jarticle.jProvider.jSearch import jpSearch
 
 ARTICLES_COLLECTION = "articles"
 
-class jPro(jpDate, jpCat, jpSocial):
+"""
+This is a Full Interface for ARTICLES collection in MongoDB.
+- It will auto initialize connection to DB/Collection.
+- You use this class direction.
+Usage:
+    - jp = jPro()
+    - jp.get_article_count()
+"""
+
+class jPro(jpSearch, jpDate, jpCat, jpSocial):
 
     def __init__(self):
         self.construct_mcollection(ARTICLES_COLLECTION)
@@ -33,7 +43,10 @@ class jPro(jpDate, jpCat, jpSocial):
             return temp2
         return False
 
+
+
 if __name__ == '__main__':
     t = jPro()
-    p = t.get_article_count()
+    p = t.add_pub_date()
+    # p = t.by_date_range_test()
     print(p)

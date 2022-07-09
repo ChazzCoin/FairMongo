@@ -1,15 +1,25 @@
 from FSON import DICT
 from FList import LIST
 from FLog.LOGGER import Log
-from Jarticle import JQ, F, jSearch
+from M.MCollection import MCollection
+from Jarticle import JQ, F
 from M.MQuery import Q
+from bson import ObjectId
+
+"""
+This is a MODEL for ARTICLES collection in MongoDB.
+- It does not get initialized.
+- It can be manually initialized or inherited by another class. -> jPro()
+Usage:
+    - jArticles().constructor_jarticles()
+"""
 
 Log = Log("jArticles")
 
 ARTICLES_COLLECTION = "articles"
 
 """ Master Class to work with Article Collection """
-class jArticles(jSearch):
+class jArticles(MCollection):
 
     @classmethod
     def constructor_jarticles(cls):
@@ -85,15 +95,31 @@ class jArticles(jSearch):
             if not _id:
                 Log.w(f"No _id found for Article. ID=[ {_id} ]")
                 return False
+        if type(_id) not in [ObjectId]:
+            q_id = JQ.ID(_id)
+        else:
+            q_id = { "_id": _id }
         Log.d(f"Beginning Article Queue. ID=[ {_id} ]")
-        self.update_record(JQ.ID(_id), single_article)
+        self.update_record(q_id, single_article)
         Log.d(f"Finished Article Queue.")
 
-    def replace_article(self, _id, single_article):
+    def replace_articles(self, list_of_articles):
+        list_of_articles = LIST.flatten(list_of_articles)
+        Log.d(f"Beginning Article Queue. COUNT=[ {len(list_of_articles)} ]")
+        for article in list_of_articles:
+            _id = DICT.get("_id", article, "")
+            self.replace_article(article, _id=_id)
+        Log.d(f"Finished Article Queue.")
+
+    def replace_article(self, single_article, _id=None):
         Log.d(f"Beginning Article Queue. ID=[ {_id} ]")
         if not _id:
             _id = DICT.get("_id", single_article, "")
-        self.replace_record(JQ.ID(_id), single_article)
+        if type(_id) not in [ObjectId]:
+            q_id = JQ.ID(_id)
+        else:
+            q_id = { "_id": _id }
+        self.replace_record(q_id, single_article)
         Log.d(f"Finished Article Queue.")
 
 if __name__ == '__main__':
