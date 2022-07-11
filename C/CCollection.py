@@ -11,6 +11,10 @@ Log = Log("MCollection")
     -> Other Classes inherent this object.
 """
 
+# # -> DB Collection Process
+# RAW_COLLECTIONS = list(db.core_db.list_collections())
+# COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
+
 class CCollection:
     cn: str = None
     cc: Database = None

@@ -1,7 +1,7 @@
 from FSON import DICT
 from FList import LIST
 from FLog.LOGGER import Log
-from CLI import UserRequest, main, Commands
+from pyFongo import UserRequest, main, CommandEngine
 from M import MDB
 from C import CCollection
 
@@ -46,6 +46,7 @@ class cliCollection:
         if potential_collection_name in main.COLLECTION_NAMES:
             # init collection
             db.set_ccollection(potential_collection_name)
+            self.init_cCollection()
             Log.cli(f"{potential_collection_name} is ready!")
             FIELDS_IN_COLLECTION = db.get_field_names()
             print(FIELDS_IN_COLLECTION)
@@ -54,10 +55,12 @@ class cliCollection:
                 Log.cli(com)
             # displaying functions from CCollection, trying to use one.
             uni = UserRequest.user_request(f"Your wish?")
+            # parse commands...
             commands = Commands.parse_cli_commands(uni)
             directory_command = LIST.get(0, commands)
             args1 = LIST.get(1, commands)
             args = DICT.get("args", args1)
+            # call command...
             result = self.call_collection_method(directory_command, args)
             Log.cli(result)
 

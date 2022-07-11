@@ -19,6 +19,18 @@ class jPro(jpSearch, jpDate, jpCat, jpSocial):
     def __init__(self):
         self.construct_mcollection(ARTICLES_COLLECTION)
 
+
+    def get_collection_methods(self):
+        return self.get_method_names(CCollection.CCollection)
+
+    def get_method_names(self, className):
+        return [func for func in dir(className)
+                if self.get_callable(self.get_func(className, func))
+                           and not func.startswith("__")
+                           and func.islower()
+                           and not func.startswith("constructor")
+                           and not func.startswith("construct")]
+
     def get_article_count(self):
         return self.get_document_count()
 

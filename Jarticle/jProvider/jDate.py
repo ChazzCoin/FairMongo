@@ -4,6 +4,14 @@ from FSON import DICT
 from Q import Q
 from Jarticle.jArticles import jArticles
 
+class QDate:
+    # -> Date
+    DATE = lambda dateStr: Q.OR([JQ.BASE_DATE(dateStr), JQ.PUBLISHED_DATE(dateStr), JQ.PUB_DATE(dateStr)])
+    DATE_LESS_THAN = lambda dateStr: JQ.DATE(Q.LESS_THAN_OR_EQUAL(dateStr))
+    DATE_GREATER_THAN = lambda dateStr: JQ.DATE(Q.GREATER_THAN_OR_EQUAL(dateStr))
+    DATE_RANGE = lambda gte, lte: {F.PUB_DATE: {O.GTE: DATE.TO_DATETIME(gte), O.LTE: DATE.TO_DATETIME(lte)}}
+    PUBLISHED_DATE_AND_URL = lambda date, url: Q.BASE_TWO(F.PUBLISHED_DATE, date, F.URL, url)
+
 """
 test = self.mcollection.aggregate(A.SORT_BY_DATE)
 """

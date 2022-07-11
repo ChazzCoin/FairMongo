@@ -1,7 +1,9 @@
 from random import randrange
 from fairNLP import Language
+from FDate import DATE
 from FSON import DICT
-from M.MQuery import Q
+from FList import LIST
+from M.MQuery import Q, A
 from Jarticle import JQ
 
 DASH_MODE = False
@@ -35,11 +37,14 @@ def parse_commands(mess: str):
 
 def parse_cli_commands(mess: str) -> (str, dict):
     """ apple airpods --date march 22 2022"""
+    #matterport --gte March 01 2022 --lte July 22 2022
     tokenized_message = mess.split(" ")
     filter_commands = {}
     directory_command = ""
     lastItem = len(tokenized_message) - 1
     i = 0
+    gte = None
+    lte = None
     while i < lastItem:
         word = tokenized_message[i]
         if word.startswith("--"):
@@ -51,16 +56,31 @@ def parse_cli_commands(mess: str) -> (str, dict):
                     break
                 input_commands = Language.combine_words(input_commands, inner_item)
                 i += 1
+
+            if filter_command == "pub_date" or filter_command == 'gte' or filter_command == 'lte':
+                if filter_command == 'gte':
+                    gte = input_commands
+                elif filter_command == 'lte':
+                    lte = input_commands
+                if gte and lte:
+                    filter_command = "pub_date"
+                    input_commands = JQ.DATE_RANGE_CLI(gte=gte, lte=lte)
+                    i += 1
+                else:
+                    i += 1
+                    continue
+
+
             filter_commands[filter_command] = input_commands
             continue
         else:
             directory_command = Language.combine_words(directory_command, word)
             i += 1
+    if not directory_command:
+        directory_command = mess
     return directory_command, filter_commands
 
-if __name__ == '__main__':
-    coms = "matterport --date March 22 2022"
-    parse_cli_commands(coms)
+parse_cli_commands("matterport --gte March 01 2022 --lte July 22 2022")
 
 def build_query(search_term, filters):
     sq = JQ.SEARCH_ALL(search_term=search_term)
@@ -77,6 +97,20 @@ def build_query(search_term, filters):
         or_list.append(temp_qeury)
     final_query = Q.AND(or_list)
     return final_query
+
+
+if __name__ == '__main__':
+    coms = "matterport --date March 22 2022 --source reddit"
+    # setest = JQ.SEARCH_ALL("matterport")
+    # dtest = {"published_date": "March 22 2022"}
+    # stest = {"source": "reddit"}
+    # matchStage = AO.MATCH(Q.AND([setest, dtest, stest]))
+    # limitStage = AO.LIMIT(100)
+    # pipeline = Pipelines.builder(matchStage, limitStage)
+    # parsed = parse_cli_commands(coms)
+    # searchTerm = LIST.get(0, parsed, False)
+    # filters = LIST.get(1, parsed, False)
+    # bq = build_query(search_term=searchTerm, filters=filters)
 
 def get_filters(directory_command, commands):
     return DICT.removeKeyValue(directory_command, commands)

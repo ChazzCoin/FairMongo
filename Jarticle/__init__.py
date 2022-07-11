@@ -1,5 +1,5 @@
 from bson import ObjectId
-from M.MQuery import Q, O
+from M.MQuery import Q, O, A
 from FDate import DATE
 
 
@@ -22,6 +22,7 @@ class F:
     URL = "url"
     URLS = "urls"
     CATEGORY = "category"
+    SCORE = "score"
 
 
 """
@@ -31,38 +32,37 @@ https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#std
 -> $sort
 """
 
-class AO:
+DESCENDING = -1
+ASCENDING = 1
 
-    LIMIT = lambda value: {O.LIMIT: value}
-    MATCH_DATE_RANGE = lambda gte, lte: {
-        O.MATCH: {F.PUB_DATE: {O.GTE: DATE.TO_DATETIME(gte), O.LTE: DATE.TO_DATETIME(lte)}}}
 
-    MATCH_SEARCH = lambda searchTerm: { O.MATCH: JQ.SEARCH_ALL(search_term=searchTerm)}
 
-    ADD_PUB_DATE_FIELD = {"$addFields": {F.PUB_DATE: { "$toDate": "$published_date" } }}
-
+class STAGE_MATCH(A):
+    MATCH_DATE_RANGE = lambda gte, lte: A.MATCH()
+    MATCH_SEARCH = lambda searchTerm: {O.MATCH: JQ.SEARCH_ALL(search_term=searchTerm)}
     MATCH_SINGLE_FIELD_VALUE = lambda field, value: {O.MATCH: {field: value}}
     MATCH_SINGLE_FIELD_EXISTS = lambda field, exists: {O.MATCH: Q.FIELD_EXISTENCE(field, exists)}
+
+class STAGE_SORT(A):
+    SORT_BY_SCORE_DATE = {A.SORT: {F.SCORE: DESCENDING, F.PUB_DATE: DESCENDING}}
+
+class STAGE_LOOKUP(A):
     LOOKUP = lambda fromCollection, localField, foreignField, outputName: {
         "from": fromCollection,
         "localField": localField,
         "foreignField": foreignField,
         "as": outputName
     }
-    MERGE_INTO_COLLECTION = lambda collectionName: {"$merge": {"into": {"db": "research", "coll": collectionName}, "on": "_id", "whenMatched": "merge"}}
-    """
-    { "$dateToString": { "format": "%B %d %Y", "date": "$date" }
-    {  }
-    
-    { $merge : { into: { db: "research", coll: "articles" }, on: "_id",  whenMatched: "merge", whenNotMatched: "insert" } }
-    """
+
 class Pipelines:
-    # ADD_PUB_DATE = [
-    #     AO.MATCH_SINGLE_FIELD_EXISTS(field="pub_date", exists=False),
-    #     AO.LIMIT(10),
-    #     AO.ADD_PUB_DATE_FIELD,
-    #     AO.MERGE_INTO_COLLECTION("temp")
-    # ]
+
+    @staticmethod
+    def builder(*stages):
+        pipeline = []
+        for stage in stages:
+            pipeline.append(stage)
+        return pipeline
+
     SEARCH_BY_DATE_RANGE = lambda searchTerm, gte, lte, limit: [
             AO.MATCH_DATE_RANGE(gte, lte),
             AO.MATCH_SEARCH(searchTerm),
@@ -88,6 +88,7 @@ class JQ:
     ID = lambda value: Q.BASE(F.ID, value if type(value) == ObjectId else ObjectId(value))
     BASE_DATE = lambda value: Q.BASE(F.DATE, value)
     PUBLISHED_DATE = lambda value: Q.BASE(F.PUBLISHED_DATE, value)
+    PUB_DATE = lambda value: Q.BASE(F.PUB_DATE, value)
     #
     FILTER_BY_FIELD = lambda field, value: Q.BASE(F.THIS(field), value)
     FILTER_BY_CATEGORY = lambda value: Q.BASE(F.THIS(F.CATEGORY), value)
@@ -96,9 +97,11 @@ class JQ:
                                           Q.BASE(F.DESCRIPTION, Q.REGEX(search_term)),
                                           Q.BASE(F.SOURCE, Q.REGEX(search_term))]
     # -> Date
-    DATE = lambda dateStr: Q.OR([JQ.BASE_DATE(dateStr), JQ.PUBLISHED_DATE(dateStr)])
+    DATE = lambda dateStr: Q.OR([JQ.BASE_DATE(dateStr), JQ.PUBLISHED_DATE(dateStr), JQ.PUB_DATE(dateStr)])
     DATE_LESS_THAN = lambda dateStr: JQ.DATE(Q.LESS_THAN_OR_EQUAL(dateStr))
     DATE_GREATER_THAN = lambda dateStr: JQ.DATE(Q.GREATER_THAN_OR_EQUAL(dateStr))
+    DATE_RANGE = lambda gte, lte: { F.PUB_DATE: {O.GTE: DATE.TO_DATETIME(gte), O.LTE: DATE.TO_DATETIME(lte)} }
+    DATE_RANGE_CLI = lambda gte, lte: {O.GTE: DATE.TO_DATETIME(gte), O.LTE: DATE.TO_DATETIME(lte)}
     PUBLISHED_DATE_AND_URL = lambda date, url: Q.BASE_TWO(F.PUBLISHED_DATE, date, F.URL, url)
     # -> Search
     SEARCH_FIELD_BY_DATE = lambda date, field, source_term: Q.BASE_TWO(F.PUBLISHED_DATE, date, field,

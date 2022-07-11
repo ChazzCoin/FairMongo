@@ -1,8 +1,9 @@
 from fairNLP import Regex
 from FList import LIST
+from FSON import DICT
 from FLog import LOGGER
-from CLI import UserRequest, Commands
-from Jarticle.jArticles import jArticles
+from pyFongo import UserRequest, CommandEngine
+from Jarticle.jProvider import jPro
 
 Log = LOGGER.Log("SearchArticles")
 
@@ -14,7 +15,7 @@ SEARCH_OPTIONS = "\nNo More Pages - 2. New Search - 3. Exit - 4. Back/Options\n"
 OPTIONS = {"1. Search -> Search Article Database.": "handle_search_input",
            "X. Exit -> Quit pyFongo CLI": "killThySelf"}
 
-db = jArticles.constructor_jarticles()
+db = jPro()
 
 def handle_search_input(user_in, newPage=False, isFirst=False):
     if isFirst:
@@ -37,7 +38,7 @@ def restart_search():
 
 def request_user_search_query():
     search_input = UserRequest.user_request(ENTER_SEARCH)
-    search_commands = Commands.parse_cli_commands(search_input)
+    search_commands = CommandEngine.parse_cli_commands(search_input)
     search_term = LIST.get(0, search_commands)
     filters = LIST.get(1, search_commands)
     perform_search(search_term, filters)
@@ -61,7 +62,7 @@ def search_loop(records):
         Log.cli(f"Page {current_page + 1} of {total_pages}")
         page_records = get_page(records, current_page)
         for i in page_records:
-            Log.print_article(art_count, i)
+            print_article(art_count, i)
             art_count += 1
 
         # -> Prepare for next input
@@ -79,7 +80,7 @@ def search_loop(records):
 
 def perform_search(search_term, filters):
     Log.i(f"{SEARCHING(search_term=search_term)}")
-    records = db.search_unlimited_filters(search_term=search_term, filters=filters)
+    records = db.search_cli(search_term=search_term, filters=filters)
     if records:
         search_loop(records)
     else:
@@ -91,3 +92,11 @@ def get_page(records, page):
     end = end_temp * 10
     start = page * 10
     return records[start:end]
+
+def print_article(i, article):
+    print("\n")
+    print(f"{i}.", str(DICT.get("title", article)))
+    print(f"Category:", str(DICT.get("category", article)))
+    print(f"Score:", str(DICT.get("score", article)))
+    print(f"URL:", str(DICT.get("url", article)))
+    # print("\n")

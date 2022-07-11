@@ -7,6 +7,24 @@ Log = Log("MQuery")
     -> Master Base Query Class/Object/Helper
 """
 
+class AO:
+    MATCH = "$match"
+    GROUP = "$group"
+    TO_DATE = "$toDate"
+    ADD_FIELDS = "$addFields"
+    LIMIT = "$limit"
+    SORT = "$sort"
+
+class A(AO):
+    MATCH = lambda matchQuery: { AO.MATCH: matchQuery }
+    LIMIT = lambda value: { AO.LIMIT: value }
+    SORT = lambda sortQuery: { AO.SORT: sortQuery }
+
+class AP(A):
+    SORT_by_SINGLE_FIELD = lambda fieldName: { AO.SORT: { fieldName: DESCENDING } }
+
+BUILD_PIPELINE = lambda *stages: [s for s in stages]
+
 class R:
     SEARCH = lambda search_term: fr'.*{search_term}.*'
     SEARCH_STRICT = lambda search_term: fr'\b{search_term}\b'
@@ -36,11 +54,7 @@ class O:
     LESS_THAN_OR_EQUAL = "$lte"
     GTE = GREATER_THAN_OR_EQUAL
     LTE = LESS_THAN_OR_EQUAL
-    MATCH = "$match"
-    GROUP = "$group"
-    TO_DATE = "$toDate"
-    ADD_FIELDS = "$addFields"
-    LIMIT = "$limit"
+
 
 class Q:
     BASE = lambda key, value: {key: value}

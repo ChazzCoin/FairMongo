@@ -1,12 +1,13 @@
 from fairNLP import Regex
 from FLog import LOGGER
-from CLI import UserRequest, SearchArticles, cliCollection
+from pyFongo import UserRequest, SearchArticles, CollectionEngine
 from M.MDB import DEFAULT_HOST_INSTANCE
 
 Log = LOGGER.Log("Search", log_level=4)
 
 db = DEFAULT_HOST_INSTANCE
 
+# -> DB Collection Process
 RAW_COLLECTIONS = list(db.core_db.list_collections())
 COLLECTION_NAMES = [it["name"] for it in RAW_COLLECTIONS]
 

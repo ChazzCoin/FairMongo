@@ -2,6 +2,7 @@ from FList import LIST
 from FSON import DICT
 from FDate import DATE
 from Jarticle import JQ, Pipelines
+from M.MQuery import Q
 from pymongo import cursor
 from Jarticle.jArticles import jArticles
 
@@ -23,6 +24,10 @@ class jpSearch(jArticles):
 
     def search_unlimited(self, search_term):
         return self.base_query(kwargs=JQ.SEARCH_ALL(search_term), page=False, limit=False)
+
+    def search_cli(self, search_term, filters):
+        kwargs = Q.AND([JQ.SEARCH_ALL(search_term), filters])
+        return self.base_query(kwargs=kwargs, page=False, limit=False)
 
     def search_unlimited_filters(self, search_term, filters):
         kwargs = Q.AND([JQ.SEARCH_ALL(search_term), filters])
