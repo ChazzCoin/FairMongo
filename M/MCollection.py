@@ -18,12 +18,6 @@ class MCollection(MCore):
     mcollection = None
 
     @classmethod
-    def GET_SOZIN(cls):
-        nc = cls()
-        nc.SozinRemote()
-        return nc
-
-    @classmethod
     def construct_fig_host_collection(cls, hostName, collectionName, databaseName=False):
         nc = cls()
         if databaseName:

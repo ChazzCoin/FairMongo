@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from pymongo.server_description import ServerDescription
+import FENV
 
 # -> MASTER PATH <- #
 MASTER_PATH = os.getcwd()
@@ -9,26 +9,12 @@ def get_parent_directory():
     path = Path(os.getcwd())
     return path.parent.absolute().__str__()
 
-""" Database/Server Names """
-LOCAL = "local"
-PROD = "prod"
-SOZIN = 'sozin'
-SOZINREMOTE = 'sozinremote'
-HARK = "hark"
-ARCHIVEPI = "archivepi"
-
-ERROR = 0  # -> Show ERROR only
-INFO = 1  # -> Show ERROR and INFO
-DEBUG = 2  # -> Show ERROR, INFO and DEBUG
-VERBOSE = 3  # -> Show ERROR, INFO, DEBUG AND VERBOSE
-LOG_LEVEL = DEBUG
-
 """
 SOZIN:
--> docker run --name tiffany-mongo4 -v /mnt/SozinData/docker/TiffanyMongo:/data/db -d mongo:4.4
+-> docker run --name mongo4 -v /Mongo:/data/db -d mongo:4.4
 
 HARK:
--> docker run --name hark-mongodb -p 27017:27017 -v /home/hark/bin/docker/mongodb:/data/db -d mongo:4.4
+-> docker run --name mongodb -p 27017:27017 -v /home/hark/bin/docker/mongodb:/data/db -d mongo:4.4
 """
 
 """
@@ -42,76 +28,17 @@ RESTORE:
 """
 
 """ -> SERVER INFO <- """
-db_environment_name = SOZINREMOTE
-db_name = "research"
+db_environment_name = FENV.get_os_variable("ARTICLE_DATABASE_NAME", default="research")
+db_name = db_environment_name
+db_host = FENV.get_os_variable("ARTICLE_DATABASE_HOST", default='localhost')
+db_port = FENV.get_os_variable("ARTICLE_DATABASE_PORT", default=27017)
+db_user = FENV.get_os_variable("ARTICLE_DATABASE_USER", default=False)
+db_password = FENV.get_os_variable("ARTICLE_DATABASE_PASSWORD", default=False)
 
 BASE_MONGO_URI = lambda mongo_ip, mongo_port: f"mongodb://{mongo_ip}:{mongo_port}"
 BASE_MONGO_AUTH_URI = lambda mongo_ip, mongo_port, user, pw: f"mongodb://{user}:{pw}@{mongo_ip}:{mongo_port}"
 
-local_mongo_ip = "localhost"
-local_mongo_port = "27017"
-local_mongo_db_uri = BASE_MONGO_URI(local_mongo_ip, local_mongo_port)
-
-prod_mongo_ip = "mongo-master.cluster-cd13wonda0ju.us-east-1.docdb.amazonaws.com"
-prod_mongo_port = "27017"
-prod_mongo_user = "tiffany"
-prod_mongo_password = "sozin1913"
-prod_mongo_db_uri = BASE_MONGO_AUTH_URI(prod_mongo_ip, prod_mongo_port, prod_mongo_user, prod_mongo_password)
-
-sozin_mongo_ip = "192.168.1.180"
-sozin_mongo_port = "27017"
-sozin_mongo_password = ""
-sozin_mongo_db_uri = BASE_MONGO_URI(sozin_mongo_ip, sozin_mongo_port)
-
-sozin_remote_mongo_ip = "aokiromeo.duckdns.org"
-sozin_remote_mongo_port = "1214"
-sozin_remote_mongo_password = ""
-sozin_remote_mongo_db_uri = BASE_MONGO_URI(sozin_remote_mongo_ip, sozin_remote_mongo_port)
-
-archivepi_mongo_ip = "192.168.1.243"
-archivepi_mongo_port = "27017"
-archivepi_mongo_password = ""
-archivepi_mongo_db_uri = BASE_MONGO_URI(archivepi_mongo_ip, archivepi_mongo_port)
-
-hark_mongo_ip = "192.168.1.166"
-hark_mongo_port = "27017"
-hark_mongo_password = ""
-hark_mongo_db_uri = BASE_MONGO_URI(hark_mongo_ip, hark_mongo_port)
-
-def get_server_environment_uri_for_host_name(hostName):
-    if hostName == LOCAL:
-        return local_mongo_db_uri
-    elif hostName == PROD:
-        return prod_mongo_db_uri
-    elif hostName == SOZIN:
-        return sozin_mongo_db_uri
-    elif hostName == ARCHIVEPI:
-        return archivepi_mongo_db_uri
-    elif hostName == HARK:
-        return hark_mongo_db_uri
-    return False
-
-def get_server_environment_uri():
-    if db_environment_name == LOCAL:
-        return local_mongo_db_uri
-    elif db_environment_name == PROD:
-        return prod_mongo_db_uri
-    elif db_environment_name == SOZIN:
-        return sozin_mongo_db_uri
-    elif db_environment_name == SOZINREMOTE:
-        return sozin_remote_mongo_db_uri
-    elif db_environment_name == ARCHIVEPI:
-        return archivepi_mongo_db_uri
-    elif db_environment_name == HARK:
-        return hark_mongo_db_uri
-
-def get_retry_queue():
-    ss_list = {}
-    ss_list[1] = sozin_mongo_db_uri
-    ss_list[2] = sozin_mongo_db_uri
-    ss_list[3] = sozin_remote_mongo_db_uri
-    ss_list[4] = hark_mongo_db_uri
-    ss_list[5] = local_mongo_db_uri
-    ss_list[6] = prod_mongo_db_uri
-    return ss_list
-
+if not db_user or db_user == "":
+    MONGO_DATABASE_URI = BASE_MONGO_URI(db_host, db_port)
+else:
+    MONGO_DATABASE_URI = BASE_MONGO_AUTH_URI(db_host, db_port, db_user, db_password)

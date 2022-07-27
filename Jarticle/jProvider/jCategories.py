@@ -1,4 +1,4 @@
-from FArt import artSort
+from JHelpers import artSort
 from FList import LIST
 from FDate import DATE
 from Jarticle import JQ

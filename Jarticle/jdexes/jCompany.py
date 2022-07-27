@@ -1,14 +1,14 @@
 from FList import LIST
 from FSON import DICT
 from FLog.LOGGER import Log
-from Jarticle import jSearch
+from Jarticle.jProvider import jPro
 
 Log = Log("jCompany")
 
 COMPANIES_COLLECTION = "companies"
 
 """ Master Class to work with Companies Collection """
-class jCompany(jSearch):
+class jCompany(jPro):
 
     @classmethod
     def constructor_jcompany(cls):

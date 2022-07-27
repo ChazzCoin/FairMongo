@@ -2,6 +2,8 @@ from Jarticle.jProvider.jDate import jpDate
 from Jarticle.jProvider.jCategories import jpCat
 from Jarticle.jProvider.jSocial import jpSocial
 from Jarticle.jProvider.jSearch import jpSearch
+from FClass import FairClass
+import FENV
 
 ARTICLES_COLLECTION = "articles"
 
@@ -14,22 +16,14 @@ Usage:
     - jp.get_article_count()
 """
 
-class jPro(jpSearch, jpDate, jpCat, jpSocial):
+class jPro(FairClass, jpSearch, jpDate, jpCat, jpSocial):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        article_activation = FENV.get_os_variable("ACTIVATE_DATABASE", convertType=bool)
+        if not article_activation:
+            return
         self.construct_mcollection(ARTICLES_COLLECTION)
-
-
-    def get_collection_methods(self):
-        return self.get_method_names(CCollection.CCollection)
-
-    def get_method_names(self, className):
-        return [func for func in dir(className)
-                if self.get_callable(self.get_func(className, func))
-                           and not func.startswith("__")
-                           and func.islower()
-                           and not func.startswith("constructor")
-                           and not func.startswith("construct")]
 
     def get_article_count(self):
         return self.get_document_count()
@@ -59,9 +53,12 @@ class jPro(jpSearch, jpDate, jpCat, jpSocial):
 
 if __name__ == '__main__':
     t = jPro()
+    r = t.get_method_names()
     # p = t.add_pub_date()
     # p = t.by_date_range_test()
     # p = t.test_new_pub_date()
     # p = t.new_search()
+    i = t.get_func(r[38])
+    u = i()
     p = t.get_article_count()
     print(p)
