@@ -20,7 +20,7 @@ class jPro(FairClass, jpSearch, jpDate, jpCat, jpSocial):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        article_activation = FENV.get_os_variable("ACTIVATE_DATABASE", convertType=bool)
+        article_activation = FENV.get_os_variable("ACTIVATE_DATABASE", default=False, toBool=True)
         if not article_activation:
             return
         self.construct_mcollection(ARTICLES_COLLECTION)

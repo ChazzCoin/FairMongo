@@ -33,8 +33,6 @@ class MCore(QBuilder, CCollection):
     # -> !!MAIN CONSTRUCTOR!! <-
     def constructor(self, url=DEFAULT_SERVER_URI, databaseName=DEFAULT_DATABASE_NAME):
         Log.className = f"MCore HOST=[ {MServers.db_environment_name} ], DATABASE=[ {databaseName} ]"
-        # count = len(qu)
-        # index = 0
         try:
             Log.i(f"Initiating MongoDB: URI={url}")
             self.core_client = MongoClient(host=url, connectTimeoutMS=10000)
@@ -54,7 +52,7 @@ class MCore(QBuilder, CCollection):
         fig_host_uri = MServers.MONGO_DATABASE_URI
         if fig_host_uri:
             try:
-                self.core_client = MongoClient(fig_host_uri, connectTimeoutMS=10, server_selector=MServers.get_server_selection_list())
+                self.core_client = MongoClient(fig_host_uri, connectTimeoutMS=10, server_selector=MServers.MONGO_DATABASE_URI())
                 self.is_connected()
             except Exception as e:
                 Log.e(f"Unable to initiate MongoDB: HOST=[ {MServers.db_environment_name} ]", error=e)
@@ -79,15 +77,21 @@ class MCore(QBuilder, CCollection):
 
     @classmethod
     def Collection(cls, collection_name):
-        nc = cls().constructor(MServers.MONGO_DATABASE_URI)
-        nc.set_ccollection(collection_name)
-        return nc.core_collection
+        try:
+            nc = cls().constructor(MServers.MONGO_DATABASE_URI)
+            nc.set_ccollection(collection_name)
+            return nc.core_collection
+        except:
+            return False
 
     @classmethod
     def SetCollection(cls, collection_name):
-        nc = cls().constructor(MServers.MONGO_DATABASE_URI)
-        nc.set_ccollection(collection_name)
-        return nc
+        try:
+            nc = cls().constructor(MServers.MONGO_DATABASE_URI)
+            nc.set_ccollection(collection_name)
+            return nc
+        except:
+            return False
 
     def get_collection(self, collection_name) -> Database:
         """
